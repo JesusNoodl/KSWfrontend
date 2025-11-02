@@ -9,7 +9,7 @@ import Contact from './pages/Contact';
 function App() {
   return (
     <Router>
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-black">
         <Navbar />
         
         <Routes>
@@ -21,9 +21,9 @@ function App() {
         </Routes>
 
         {/* Footer */}
-        <footer className="bg-gray-800 text-white py-8 mt-16">
+        <footer className="bg-black text-white py-8 mt-16">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <p>&copy; 2025 KSW Martial Arts. All rights reserved.</p>
+            <p>&copy; 2025 Fakenham Martial Arts. All rights reserved.</p>
           </div>
         </footer>
       </div>

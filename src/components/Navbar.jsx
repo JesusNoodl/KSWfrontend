@@ -1,49 +1,79 @@
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 function Navbar() {
+  const location = useLocation();
+  
+  const isActive = (path) => {
+    return location.pathname === path;
+  };
+
   return (
-    <nav className="bg-white shadow-lg">
+    <nav className="bg-[#2e2e2e] shadow-2xl sticky top-0 z-50 border-b-2 border-[#ff6d00]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between h-16 items-center">
-          <Link to="/" className="text-2xl font-bold text-blue-600 hover:text-blue-700">
-            KSW Martial Arts
+        <div className="flex justify-between h-20 items-center">
+          <Link to="/" className="text-2xl md:text-3xl font-black text-[#ff6d00] hover:text-white transition-colors duration-300 tracking-tight">
+            FAKENHAM<span className="text-white"> MARTIAL ARTS</span>
           </Link>
-          <div className="flex items-center space-x-1">
+          
+          <div className="hidden md:flex items-center space-x-2">
             <Link 
               to="/" 
-              className="text-gray-700 hover:text-blue-600 hover:bg-gray-100 px-4 py-2 rounded transition"
+              className={`${
+                isActive('/') 
+                  ? 'text-white bg-[#ff6d00]' 
+                  : 'text-[#ff6d00] hover:text-white hover:bg-[#3d3d3d]'
+              } px-4 py-2 rounded-lg transition-all duration-300 font-semibold`}
             >
               Home
             </Link>
             <Link 
               to="/schedule" 
-              className="text-gray-700 hover:text-blue-600 hover:bg-gray-100 px-4 py-2 rounded transition"
+              className={`${
+                isActive('/schedule') 
+                  ? 'text-white bg-[#ff6d00]' 
+                  : 'text-[#ff6d00] hover:text-white hover:bg-[#3d3d3d]'
+              } px-4 py-2 rounded-lg transition-all duration-300 font-semibold`}
             >
               Schedule
             </Link>
             <Link 
               to="/team" 
-              className="text-gray-700 hover:text-blue-600 hover:bg-gray-100 px-4 py-2 rounded transition"
+              className={`${
+                isActive('/team') 
+                  ? 'text-white bg-[#ff6d00]' 
+                  : 'text-[#ff6d00] hover:text-white hover:bg-[#3d3d3d]'
+              } px-4 py-2 rounded-lg transition-all duration-300 font-semibold`}
             >
               Team
             </Link>
             <Link 
               to="/about" 
-              className="text-gray-700 hover:text-blue-600 hover:bg-gray-100 px-4 py-2 rounded transition"
+              className={`${
+                isActive('/about') 
+                  ? 'text-white bg-[#ff6d00]' 
+                  : 'text-[#ff6d00] hover:text-white hover:bg-[#3d3d3d]'
+              } px-4 py-2 rounded-lg transition-all duration-300 font-semibold`}
             >
               About
             </Link>
             <Link 
               to="/contact" 
-              className="text-gray-700 hover:text-blue-600 hover:bg-gray-100 px-4 py-2 rounded transition"
+              className={`${
+                isActive('/contact') 
+                  ? 'text-white bg-[#ff6d00]' 
+                  : 'text-[#ff6d00] hover:text-white hover:bg-[#3d3d3d]'
+              } px-4 py-2 rounded-lg transition-all duration-300 font-semibold`}
             >
               Contact
             </Link>
-            <Link to="/login" className="ml-2">
-              <button className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition font-medium">
-                Login
-              </button>
-            </Link>
+            
+            <div className="ml-4 pl-4 border-l-2 border-[#ff6d00]">
+              <Link to="/login">
+                <button className="bg-[#ff6d00] text-black px-6 py-2.5 rounded-lg hover:bg-white hover:scale-105 transition-all duration-300 font-bold shadow-lg">
+                  Login
+                </button>
+              </Link>
+            </div>
           </div>
         </div>
       </div>
