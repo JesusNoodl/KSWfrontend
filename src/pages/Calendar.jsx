@@ -49,30 +49,37 @@ function Calendar() {
     });
   };
 
-  // Generate calendar days
-  const generateCalendarDays = () => {
+    // Generate calendar days
+    const generateCalendarDays = () => {
     const year = currentDate.getFullYear();
     const month = currentDate.getMonth();
     
     const firstDay = new Date(year, month, 1);
     const lastDay = new Date(year, month + 1, 0);
-    const startingDayOfWeek = firstDay.getDay();
+    
+    // Get day of week (0 = Sunday, 1 = Monday, etc.)
+    let startingDayOfWeek = firstDay.getDay();
+    
+    // Convert Sunday (0) to 6, and shift everything else down by 1
+    // So Monday becomes 0, Tuesday becomes 1, ..., Sunday becomes 6
+    startingDayOfWeek = startingDayOfWeek === 0 ? 6 : startingDayOfWeek - 1;
+    
     const totalDays = lastDay.getDate();
     
     const days = [];
     
     // Add empty cells for days before month starts
     for (let i = 0; i < startingDayOfWeek; i++) {
-      days.push(null);
+        days.push(null);
     }
     
     // Add all days in month
     for (let day = 1; day <= totalDays; day++) {
-      days.push(new Date(year, month, day));
+        days.push(new Date(year, month, day));
     }
     
     return days;
-  };
+    };
 
   const formatTime = (time) => {
     if (!time) return '';
@@ -100,7 +107,7 @@ function Calendar() {
   const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
                       'July', 'August', 'September', 'October', 'November', 'December'];
   
-  const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+  const dayNames = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 
   const calendarDays = generateCalendarDays();
 
