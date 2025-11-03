@@ -6,7 +6,6 @@ import Calendar from './pages/Calendar';
 import Team from './pages/Team';
 import About from './pages/About';
 import Contact from './pages/Contact';
-import { Analytics } from "@vercel/analytics/next";
 
 
 function App() {
