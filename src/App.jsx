@@ -2,9 +2,11 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Home from './pages/Home';
 import Schedule from './pages/Schedule';
+import Calendar from './pages/Calendar';
 import Team from './pages/Team';
 import About from './pages/About';
 import Contact from './pages/Contact';
+
 
 function App() {
   return (
@@ -18,6 +20,7 @@ function App() {
           <Route path="/team" element={<Team />} />
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/calendar" element={<Calendar />} />
         </Routes>
 
         {/* Footer */}
