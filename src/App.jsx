@@ -6,6 +6,7 @@ import Calendar from './pages/Calendar';
 import Team from './pages/Team';
 import About from './pages/About';
 import Contact from './pages/Contact';
+import { SpeedInsights } from '@vercel/speed-insights/react';
 
 
 function App() {
@@ -29,6 +30,7 @@ function App() {
             <p>&copy; 2025 Fakenham Martial Arts. All rights reserved.</p>
           </div>
         </footer>
+        <SpeedInsights />
       </div>
     </Router>
   );
