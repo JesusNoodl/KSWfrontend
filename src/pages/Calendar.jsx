@@ -21,7 +21,7 @@ function Calendar() {
       const lastDay = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
       
       const { data, error } = await supabase
-        .from('full_calendar') // Replace with your actual table name
+        .from('full_calendar') 
         .select('*')
         .gte('date', firstDay.toISOString())
         .lte('date', lastDay.toISOString())
@@ -49,8 +49,8 @@ function Calendar() {
     });
   };
 
-    // Generate calendar days
-    const generateCalendarDays = () => {
+  // Generate calendar days
+  const generateCalendarDays = () => {
     const year = currentDate.getFullYear();
     const month = currentDate.getMonth();
     
@@ -70,33 +70,39 @@ function Calendar() {
     
     // Add empty cells for days before month starts
     for (let i = 0; i < startingDayOfWeek; i++) {
-        days.push(null);
+      days.push(null);
     }
     
     // Add all days in month
     for (let day = 1; day <= totalDays; day++) {
-        days.push(new Date(year, month, day));
+      days.push(new Date(year, month, day));
     }
     
     return days;
-    };
+  };
 
   const formatTime = (time) => {
     if (!time) return '';
     return time.substring(0, 5);
   };
 
-  const getClassColor = (className) => {
-    const nameLower = className.toLowerCase();
-    if (nameLower.includes('little lions')) {
-      return 'bg-green-500';
-    } else if (nameLower.includes('junior')) {
-      return 'bg-yellow-500';
-    } else if (nameLower.includes('adult')) {
-      return 'bg-red-500';
-    } else if (nameLower.includes('tournament') || nameLower.includes('weapons')) {
-      return 'bg-purple-500';
+  const getClassColor = (item) => {
+    // Check if it's an event
+    if (item.calendar_type === 'event') {
+      const eventType = item.event_type?.toLowerCase() || '';
+      if (eventType.includes('tournament')) return 'bg-orange-500';
+      if (eventType.includes('seminar')) return 'bg-indigo-500';
+      if (eventType.includes('testing') || eventType.includes('promotion')) return 'bg-pink-500';
+      if (eventType.includes('charity')) return 'bg-teal-500';
+      return 'bg-cyan-500'; // default for other events
     }
+    
+    // Existing class color logic
+    const nameLower = item.class_name?.toLowerCase() || '';
+    if (nameLower.includes('little lions')) return 'bg-green-500';
+    else if (nameLower.includes('junior')) return 'bg-yellow-500';
+    else if (nameLower.includes('adult')) return 'bg-red-500';
+    else if (nameLower.includes('tournament') || nameLower.includes('weapons')) return 'bg-purple-500';
     return 'bg-blue-500';
   };
 
@@ -204,7 +210,7 @@ function Calendar() {
                     {dayEvents.slice(0, 3).map((event, i) => (
                       <div
                         key={i}
-                        className={`${getClassColor(event.class_name)} text-white text-xs px-1 rounded truncate`}
+                        className={`${getClassColor(event)} text-white text-xs px-1 rounded truncate`}
                         title={`${event.class_name} - ${formatTime(event.start_time)}`}
                       >
                         {formatTime(event.start_time)}
@@ -229,19 +235,44 @@ function Calendar() {
             
             {getEventsForDate(selectedDate).length > 0 ? (
               <div className="space-y-4">
-                {getEventsForDate(selectedDate).map((event) => (
+                {getEventsForDate(selectedDate).map((event, idx) => (
                   <div 
-                    key={event.class_id + event.start_time}
+                    key={`${event.class_id || event.event_id}-${event.start_time}-${idx}`}
                     className="bg-[#2e2e2e] p-6 rounded-xl border-l-4 border-[#ff6d00] hover:shadow-lg transition"
                   >
-                    <div className="flex justify-between items-start">
-                      <div>
-                        <h4 className="text-xl font-bold text-white mb-2">{event.class_name}</h4>
-                        <p className="text-gray-400 mb-2">{event.description}</p>
+                    <div className="flex justify-between items-start mb-3">
+                      <div className="flex-1">
+                        <div className="flex items-center gap-3 mb-2">
+                          <h4 className="text-xl font-bold text-white">{event.class_name}</h4>
+                          {event.event_type && (
+                            <span className="bg-[#ff6d00] text-white text-xs px-3 py-1 rounded-full font-bold uppercase">
+                              {event.event_type}
+                            </span>
+                          )}
+                          {event.calendar_type === 'event' && !event.event_type && (
+                            <span className="bg-cyan-500 text-white text-xs px-3 py-1 rounded-full font-bold uppercase">
+                              EVENT
+                            </span>
+                          )}
+                        </div>
+                        {event.description && (
+                          <p className="text-gray-400 mb-3">{event.description}</p>
+                        )}
+                        {event.location_name && (
+                          <div className="flex items-center text-gray-400 text-sm mb-1">
+                            <span className="mr-2">📍</span>
+                            <span className="font-semibold">{event.location_name}</span>
+                            {event.is_dojang && (
+                              <span className="ml-2 text-[#ff6d00] text-xs">(Main Dojang)</span>
+                            )}
+                          </div>
+                        )}
                       </div>
-                      <div className={`${getClassColor(event.class_name)} text-white px-4 py-2 rounded-lg font-bold`}>
-                        {formatTime(event.start_time)} - {formatTime(event.end_time)}
-                      </div>
+                      {event.start_time && event.end_time && (
+                        <div className={`${getClassColor(event)} text-white px-4 py-2 rounded-lg font-bold whitespace-nowrap ml-4`}>
+                          {formatTime(event.start_time)} - {formatTime(event.end_time)}
+                        </div>
+                      )}
                     </div>
                   </div>
                 ))}
@@ -254,27 +285,57 @@ function Calendar() {
 
         {/* Legend */}
         <div className="mt-8 bg-[#1a1a1a] rounded-xl p-6">
-          <h3 className="text-xl font-bold text-white mb-4">Class Types</h3>
-          <div className="flex flex-wrap gap-4">
-            <div className="flex items-center">
-              <div className="w-4 h-4 bg-green-500 rounded mr-2"></div>
-              <span className="text-gray-300">Little Lions</span>
+          <h3 className="text-xl font-bold text-white mb-4">Legend</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <h4 className="text-[#ff6d00] font-bold mb-3">Classes</h4>
+              <div className="space-y-2">
+                <div className="flex items-center">
+                  <div className="w-4 h-4 bg-green-500 rounded mr-2"></div>
+                  <span className="text-gray-300">Little Lions</span>
+                </div>
+                <div className="flex items-center">
+                  <div className="w-4 h-4 bg-yellow-500 rounded mr-2"></div>
+                  <span className="text-gray-300">Junior Classes</span>
+                </div>
+                <div className="flex items-center">
+                  <div className="w-4 h-4 bg-red-500 rounded mr-2"></div>
+                  <span className="text-gray-300">Adult Classes</span>
+                </div>
+                <div className="flex items-center">
+                  <div className="w-4 h-4 bg-purple-500 rounded mr-2"></div>
+                  <span className="text-gray-300">Special Classes</span>
+                </div>
+                <div className="flex items-center">
+                  <div className="w-4 h-4 bg-blue-500 rounded mr-2"></div>
+                  <span className="text-gray-300">All Ages</span>
+                </div>
+              </div>
             </div>
-            <div className="flex items-center">
-              <div className="w-4 h-4 bg-yellow-500 rounded mr-2"></div>
-              <span className="text-gray-300">Junior Classes</span>
-            </div>
-            <div className="flex items-center">
-              <div className="w-4 h-4 bg-red-500 rounded mr-2"></div>
-              <span className="text-gray-300">Adult Classes</span>
-            </div>
-            <div className="flex items-center">
-              <div className="w-4 h-4 bg-purple-500 rounded mr-2"></div>
-              <span className="text-gray-300">Special Classes</span>
-            </div>
-            <div className="flex items-center">
-              <div className="w-4 h-4 bg-blue-500 rounded mr-2"></div>
-              <span className="text-gray-300">All Ages</span>
+            <div>
+              <h4 className="text-[#ff6d00] font-bold mb-3">Events</h4>
+              <div className="space-y-2">
+                <div className="flex items-center">
+                  <div className="w-4 h-4 bg-orange-500 rounded mr-2"></div>
+                  <span className="text-gray-300">Tournaments</span>
+                </div>
+                <div className="flex items-center">
+                  <div className="w-4 h-4 bg-indigo-500 rounded mr-2"></div>
+                  <span className="text-gray-300">Seminars</span>
+                </div>
+                <div className="flex items-center">
+                  <div className="w-4 h-4 bg-pink-500 rounded mr-2"></div>
+                  <span className="text-gray-300">Testing/Promotion</span>
+                </div>
+                <div className="flex items-center">
+                  <div className="w-4 h-4 bg-teal-500 rounded mr-2"></div>
+                  <span className="text-gray-300">Charity Events</span>
+                </div>
+                <div className="flex items-center">
+                  <div className="w-4 h-4 bg-cyan-500 rounded mr-2"></div>
+                  <span className="text-gray-300">Other Events</span>
+                </div>
+              </div>
             </div>
           </div>
         </div>
