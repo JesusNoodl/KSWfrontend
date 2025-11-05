@@ -16,15 +16,25 @@ function Calendar() {
     try {
       setLoading(true);
       
-      // Get first and last day of current month
-      const firstDay = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
-      const lastDay = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
+      // Get first and last day of current month (format as YYYY-MM-DD without timezone)
+      const year = currentDate.getFullYear();
+      const month = currentDate.getMonth();
+      const firstDay = new Date(year, month, 1);
+      const lastDay = new Date(year, month + 1, 0);
+      
+      // Format dates as YYYY-MM-DD strings
+      const formatDate = (date) => {
+        const y = date.getFullYear();
+        const m = String(date.getMonth() + 1).padStart(2, '0');
+        const d = String(date.getDate()).padStart(2, '0');
+        return `${y}-${m}-${d}`;
+      };
       
       const { data, error } = await supabase
         .from('full_calendar') 
         .select('*')
-        .gte('date', firstDay.toISOString())
-        .lte('date', lastDay.toISOString())
+        .gte('date', formatDate(firstDay))
+        .lte('date', formatDate(lastDay))
         .order('date', { ascending: true })
         .order('start_time', { ascending: true });
 
@@ -42,10 +52,15 @@ function Calendar() {
 
   // Get events for a specific date
   const getEventsForDate = (date) => {
-    const dateStr = date.toISOString().split('T')[0];
+    // Format the date as YYYY-MM-DD
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    const dateStr = `${year}-${month}-${day}`;
+    
     return events.filter(event => {
-      const eventDate = new Date(event.date).toISOString().split('T')[0];
-      return eventDate === dateStr;
+      // event.date from database is already in YYYY-MM-DD format
+      return event.date === dateStr;
     });
   };
 
