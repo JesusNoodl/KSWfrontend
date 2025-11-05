@@ -1,6 +1,9 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '../config/supabase';
 
+export const revalidate = 0;
+export const dynamic = 'force-dynamic';
+
 function Calendar() {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
