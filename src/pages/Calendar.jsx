@@ -16,13 +16,11 @@ function Calendar() {
     try {
       setLoading(true);
       
-      // Get first and last day of current month (format as YYYY-MM-DD without timezone)
       const year = currentDate.getFullYear();
       const month = currentDate.getMonth();
       const firstDay = new Date(year, month, 1);
       const lastDay = new Date(year, month + 1, 0);
       
-      // Format dates as YYYY-MM-DD strings
       const formatDate = (date) => {
         const y = date.getFullYear();
         const m = String(date.getMonth() + 1).padStart(2, '0');
@@ -30,17 +28,21 @@ function Calendar() {
         return `${y}-${m}-${d}`;
       };
       
+      const firstDateStr = formatDate(firstDay);
+      const lastDateStr = formatDate(lastDay);
+      
       const { data, error } = await supabase
         .from('full_calendar') 
         .select('*')
-        .gte('date', formatDate(firstDay))
-        .lte('date', formatDate(lastDay))
+        .gte('date', firstDateStr)
+        .lte('date', lastDateStr)
         .order('date', { ascending: true })
         .order('start_time', { ascending: true });
 
       if (error) throw error;
 
       setEvents(data || []);
+      console.log('Fetched events:', data);
       
     } catch (error) {
       console.error('Error fetching events:', error);
@@ -50,21 +52,15 @@ function Calendar() {
     }
   };
 
-  // Get events for a specific date
   const getEventsForDate = (date) => {
-    // Format the date as YYYY-MM-DD
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, '0');
     const day = String(date.getDate()).padStart(2, '0');
     const dateStr = `${year}-${month}-${day}`;
     
-    return events.filter(event => {
-      // event.date from database is already in YYYY-MM-DD format
-      return event.date === dateStr;
-    });
+    return events.filter(event => event.date === dateStr);
   };
 
-  // Generate calendar days
   const generateCalendarDays = () => {
     const year = currentDate.getFullYear();
     const month = currentDate.getMonth();
@@ -72,23 +68,16 @@ function Calendar() {
     const firstDay = new Date(year, month, 1);
     const lastDay = new Date(year, month + 1, 0);
     
-    // Get day of week (0 = Sunday, 1 = Monday, etc.)
     let startingDayOfWeek = firstDay.getDay();
-    
-    // Convert Sunday (0) to 6, and shift everything else down by 1
-    // So Monday becomes 0, Tuesday becomes 1, ..., Sunday becomes 6
     startingDayOfWeek = startingDayOfWeek === 0 ? 6 : startingDayOfWeek - 1;
     
     const totalDays = lastDay.getDate();
-    
     const days = [];
     
-    // Add empty cells for days before month starts
     for (let i = 0; i < startingDayOfWeek; i++) {
       days.push(null);
     }
     
-    // Add all days in month
     for (let day = 1; day <= totalDays; day++) {
       days.push(new Date(year, month, day));
     }
@@ -102,17 +91,15 @@ function Calendar() {
   };
 
   const getClassColor = (item) => {
-    // Check if it's an event
     if (item.calendar_type === 'event') {
       const eventType = item.event_type?.toLowerCase() || '';
       if (eventType.includes('tournament')) return 'bg-orange-500';
       if (eventType.includes('seminar')) return 'bg-indigo-500';
       if (eventType.includes('testing') || eventType.includes('promotion')) return 'bg-pink-500';
       if (eventType.includes('charity')) return 'bg-teal-500';
-      return 'bg-cyan-500'; // default for other events
+      return 'bg-cyan-500';
     }
     
-    // Existing class color logic
     const nameLower = item.class_name?.toLowerCase() || '';
     if (nameLower.includes('little lions')) return 'bg-green-500';
     else if (nameLower.includes('junior')) return 'bg-yellow-500';
@@ -157,14 +144,12 @@ function Calendar() {
   return (
     <div className="bg-[#2e2e2e] min-h-screen py-16">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Header */}
         <div className="text-center mb-12">
           <h1 className="text-5xl font-black text-white mb-4">Class Calendar</h1>
           <div className="w-24 h-1 bg-[#ff6d00] mx-auto mb-4"></div>
           <p className="text-gray-400 text-lg">View all upcoming classes and events</p>
         </div>
 
-        {/* Calendar Controls */}
         <div className="bg-[#1a1a1a] rounded-xl p-6 mb-8 flex justify-between items-center">
           <button 
             onClick={() => changeMonth(-1)}
@@ -185,9 +170,7 @@ function Calendar() {
           </button>
         </div>
 
-        {/* Calendar Grid */}
         <div className="bg-[#1a1a1a] rounded-2xl p-6 shadow-2xl border-2 border-[#3d3d3d]">
-          {/* Day Headers */}
           <div className="grid grid-cols-7 gap-2 mb-4">
             {dayNames.map(day => (
               <div key={day} className="text-center font-bold text-[#ff6d00] py-2">
@@ -196,7 +179,6 @@ function Calendar() {
             ))}
           </div>
 
-          {/* Calendar Days */}
           <div className="grid grid-cols-7 gap-2">
             {calendarDays.map((day, index) => {
               if (!day) {
@@ -241,7 +223,6 @@ function Calendar() {
           </div>
         </div>
 
-        {/* Selected Date Details */}
         {selectedDate && (
           <div className="mt-8 bg-[#1a1a1a] rounded-2xl p-8 border-2 border-[#ff6d00]">
             <h3 className="text-3xl font-black text-white mb-6">
@@ -298,7 +279,6 @@ function Calendar() {
           </div>
         )}
 
-        {/* Legend */}
         <div className="mt-8 bg-[#1a1a1a] rounded-xl p-6">
           <h3 className="text-xl font-bold text-white mb-4">Legend</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
