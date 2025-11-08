@@ -31,6 +31,14 @@ function Contact() {
                 />
               </div>
               <div>
+                <label className="block text-gray-300 mb-2 font-semibold">Phone Number</label>
+                <input 
+                  type="tel" 
+                  className="w-full px-4 py-3 bg-[#2e2e2e] border-2 border-[#3d3d3d] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#ff6d00] focus:border-transparent text-white placeholder-gray-500 transition"
+                  placeholder="07123456789"
+                />
+              </div>
+              <div>
                 <label className="block text-gray-300 mb-2 font-semibold">Message</label>
                 <textarea 
                   rows="5"

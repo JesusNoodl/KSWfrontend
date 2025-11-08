@@ -80,11 +80,11 @@ function Home() {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-4xl md:text-5xl font-black mb-6">Ready to Begin Your Journey?</h2>
           <p className="text-xl mb-8 text-gray-300">
-            Join our community and discover the life-changing benefits of martial arts training
+            Join our community and discover the benefits of martial arts training
           </p>
-          <button className="bg-[#ff6d00] text-black px-12 py-4 rounded-xl font-bold text-lg hover:bg-[#e66200] hover:scale-105 transition-all duration-300 shadow-2xl">
+         <Link to="/Contact"><button className="bg-[#ff6d00] text-black px-12 py-4 rounded-xl font-bold text-lg hover:bg-[#e66200] hover:scale-105 transition-all duration-300 shadow-2xl">
             Book Your Free Trial
-          </button>
+          </button></Link> 
         </div>
       </div>
     </>
