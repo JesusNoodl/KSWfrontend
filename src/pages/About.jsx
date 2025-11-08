@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom';
+
 function About() {
   return (
     <div className="bg-[#2e2e2e] min-h-screen py-16">
@@ -62,9 +64,12 @@ function About() {
           <p className="text-white text-lg mb-6">
             Join our martial arts family and discover what you're truly capable of
           </p>
-          <button className="bg-black text-[#ff6d00] px-12 py-4 rounded-xl font-bold text-lg hover:bg-white hover:text-black hover:scale-105 transition-all duration-300 shadow-2xl">
-            Contact Us Today
-          </button>
+          <Link
+            to="/contact"
+            className="bg-black text-[#ff6d00] px-12 py-4 rounded-xl font-bold text-lg hover:bg-white hover:text-black hover:scale-105 transition-all duration-300 shadow-2xl"
+          >
+            Book Your Free Trial
+          </Link>
         </div>
       </div>
     </div>

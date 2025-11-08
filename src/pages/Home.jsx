@@ -1,4 +1,9 @@
+import { Link } from 'react-router-dom';
+import { useState } from 'react';
+
 function Home() {
+  const [showVideo, setShowVideo] = useState(false);
+
   return (
     <>
       {/* Hero Section */}
@@ -18,10 +23,16 @@ function Home() {
             Transform your mind, body, and spirit through martial arts
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <button className="bg-black text-[#ff6d00] px-10 py-4 rounded-xl font-bold text-lg hover:bg-gray-900 hover:scale-105 transition-all duration-300 shadow-2xl">
+            <Link
+              to="/contact"
+              className="bg-black text-[#ff6d00] px-10 py-4 rounded-xl font-bold text-lg hover:bg-gray-900 hover:scale-105 transition-all duration-300 shadow-2xl inline-block"
+            >
               Get Started Today
-            </button>
-            <button className="bg-white text-black px-10 py-4 rounded-xl font-bold text-lg hover:bg-gray-100 hover:scale-105 transition-all duration-300 shadow-2xl border-2 border-black">
+            </Link>
+            <button 
+              onClick={() => setShowVideo(true)}
+              className="bg-white text-black px-10 py-4 rounded-xl font-bold text-lg hover:bg-gray-100 hover:scale-105 transition-all duration-300 shadow-2xl border-2 border-black"
+            >
               Watch Video
             </button>
           </div>
@@ -59,7 +70,7 @@ function Home() {
               <div className="text-6xl mb-6 group-hover:scale-110 transition-transform duration-300">👨‍👩‍👧‍👦</div>
               <h3 className="text-2xl font-bold mb-4 text-gray-900">All Ages Welcome</h3>
               <p className="text-gray-600 leading-relaxed">
-                Classes designed for kids, teens, and adults at every skill level from beginner to advanced
+                Classes designed for kids, teens, and adults at every skill level from beginner to black belt
               </p>
             </div>
 
@@ -68,7 +79,7 @@ function Home() {
               <div className="text-6xl mb-6 group-hover:scale-110 transition-transform duration-300">🏆</div>
               <h3 className="text-2xl font-bold mb-4 text-gray-900">Modern Facilities</h3>
               <p className="text-gray-600 leading-relaxed">
-                Train in our state-of-the-art dojo with professional equipment and a welcoming atmosphere
+                Train in our dojang with professional instructors and a welcoming atmosphere
               </p>
             </div>
           </div>
@@ -82,11 +93,51 @@ function Home() {
           <p className="text-xl mb-8 text-gray-300">
             Join our community and discover the benefits of martial arts training
           </p>
-         <Link to="/Contact"><button className="bg-[#ff6d00] text-black px-12 py-4 rounded-xl font-bold text-lg hover:bg-[#e66200] hover:scale-105 transition-all duration-300 shadow-2xl">
+          <Link
+            to="/contact"
+            className="bg-[#ff6d00] text-black px-12 py-4 rounded-xl font-bold text-lg hover:bg-[#e66200] hover:scale-105 transition-all duration-300 shadow-2xl inline-block"
+          >
             Book Your Free Trial
-          </button></Link> 
+          </Link>
         </div>
       </div>
+
+      {/* Video Modal */}
+      {showVideo && (
+        <div 
+          className="fixed inset-0 bg-black bg-opacity-80 z-50 flex items-center justify-center p-4"
+          onClick={() => setShowVideo(false)}
+        >
+          <div 
+            className="relative bg-[#1a1a1a] rounded-2xl shadow-2xl max-w-2xl w-full"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Close Button */}
+            <button
+              onClick={() => setShowVideo(false)}
+              className="absolute -top-4 -right-4 bg-[#ff6d00] text-white rounded-full w-12 h-12 flex items-center justify-center text-2xl font-bold hover:bg-[#e66200] hover:scale-110 transition-all duration-300 shadow-2xl z-10"
+              aria-label="Close video"
+            >
+              ×
+            </button>
+
+            {/* Video Container */}
+            <div className="p-6">
+              <div className="relative w-full" style={{ paddingBottom: '177.5%' }}>
+                <iframe 
+                  src="https://www.facebook.com/plugins/video.php?height=476&href=https%3A%2F%2Fwww.facebook.com%2FFakenhamkuksoolwon%2Fvideos%2F873246978349256%2F&show_text=false&width=267&t=0" 
+                  className="absolute top-0 left-0 w-full h-full rounded-lg"
+                  style={{ border: 'none' }}
+                  scrolling="no" 
+                  frameBorder="0" 
+                  allowFullScreen={true} 
+                  allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 }

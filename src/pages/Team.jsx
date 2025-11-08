@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom';
+
 function Team() {
   const team = [
     {
@@ -51,9 +53,12 @@ function Team() {
               Our instructors bring decades of experience and passion for martial arts. Join us and experience world-class training.
             </p>
             <div className="text-center">
-              <button className="bg-black text-[#ff6d00] px-10 py-4 rounded-xl font-bold text-lg hover:bg-white hover:text-black hover:scale-105 transition-all duration-300 shadow-2xl">
+              <Link
+                to="/contact"
+                className="bg-black text-[#ff6d00] px-10 py-4 rounded-xl font-bold text-lg hover:bg-white hover:text-black hover:scale-105 transition-all duration-300 shadow-2xl"
+              >
                 Book Your Free Trial
-              </button>
+              </Link>
             </div>
           </div>
         </div>
