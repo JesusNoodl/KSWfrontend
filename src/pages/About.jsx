@@ -11,7 +11,7 @@ function About() {
         </div>
 
         {/* Our Story */}
-        <div className="bg-[#1a1a1a] rounded-2xl shadow-2xl p-10 mb-10 border-2 border-[#3d3d3d] hover:border-[#ff6d00] transition-all duration-300">
+        <div className="bg-[#1a1a1a] rounded-2xl shadow-2xl p-10 mb-10 border-t-4 border-[#ff6d00] hover:shadow-[#ff6d00]/50 transition-all duration-300">
           <h2 className="text-3xl font-black mb-6 text-[#ff6d00]">Our Story</h2>
           <p className="text-gray-300 mb-6 text-lg leading-relaxed">
             KSW Martial Arts was founded in 2010 with a mission to provide high-quality martial arts 
@@ -58,8 +58,19 @@ function About() {
           </div>
         </div>
 
+        {/* What is Kuk Sool Won*/}
+        <div className="bg-[#1a1a1a] rounded-2xl shadow-2xl p-10 mb-10 border-t-4 border-[#ff6d00] hover:shadow-[#ff6d00]/50 transition-all duration-300 mt-8">
+          <h2 className="text-3xl font-black mb-6 text-[#ff6d00]">What is Kuk Sool Won</h2>
+          <p className="text-gray-300 mb-6 text-lg leading-relaxed">
+            Kuk Sool Won is a Korean martial art....
+          </p>
+          <p className="text-gray-300 text-lg leading-relaxed">
+            It was founded by Grand Master - Kuk Sa Nim....
+          </p>
+        </div>
+
         {/* CTA Section */}
-        <div className="mt-16 bg-gradient-to-r from-[#ff6d00] to-[#e66200] p-10 rounded-2xl shadow-2xl text-center">
+        <div className="mt-8 bg-gradient-to-r from-[#ff6d00] to-[#e66200] p-10 rounded-2xl shadow-2xl text-center">
           <h3 className="font-black text-3xl mb-4 text-white">Ready to Start Your Journey?</h3>
           <p className="text-white text-lg mb-6">
             Join our martial arts family and discover what you're truly capable of

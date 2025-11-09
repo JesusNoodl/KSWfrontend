@@ -6,6 +6,7 @@ import Calendar from './pages/Calendar';
 import Team from './pages/Team';
 import About from './pages/About';
 import Contact from './pages/Contact';
+import News from './pages/News';
 import { SpeedInsights } from '@vercel/speed-insights/react';
 
 
@@ -22,6 +23,7 @@ function App() {
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/calendar" element={<Calendar />} />
+          <Route path="/news" element={<News />} />
         </Routes>
 
         {/* Footer */}

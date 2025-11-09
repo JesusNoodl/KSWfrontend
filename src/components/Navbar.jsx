@@ -67,6 +67,16 @@ function Navbar() {
               About
             </Link>
             <Link 
+              to="/news" 
+              className={`${
+                isActive('/news') 
+                  ? 'text-white bg-[#ff6d00]' 
+                  : 'text-[#ff6d00] hover:text-white hover:bg-[#3d3d3d]'
+              } px-4 py-2 rounded-lg transition-all duration-300 font-semibold`}
+            >
+              News
+            </Link>
+            <Link 
               to="/contact" 
               className={`${
                 isActive('/contact') 
