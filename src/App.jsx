@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './contexts/AuthContext';
 import Navbar from './components/Navbar';
+import ProtectedRoute from './components/ProtectedRoute';
 import Home from './pages/Home';
 import Schedule from './pages/Schedule';
 import Team from './pages/Team';
@@ -9,6 +10,8 @@ import Contact from './pages/Contact';
 import Calendar from './pages/Calendar';
 import Login from './pages/Login';
 import News from './pages/News';
+import MemberDashboard from './pages/member/MemberDashboard';
+import MemberPromotionsPage from './pages/member/MemberPromotionsPage';
 import { SpeedInsights } from '@vercel/speed-insights/react';
 
 function App() {
@@ -19,6 +22,7 @@ function App() {
           <Navbar />
           
           <Routes>
+            {/* Public Routes */}
             <Route path="/" element={<Home />} />
             <Route path="/schedule" element={<Schedule />} />
             <Route path="/team" element={<Team />} />
@@ -27,6 +31,34 @@ function App() {
             <Route path="/calendar" element={<Calendar />} />
             <Route path="/news" element={<News />} />
             <Route path="/login" element={<Login />} />
+
+            {/* Protected Member Routes */}
+            <Route 
+              path="/member" 
+              element={
+                <ProtectedRoute>
+                  <MemberDashboard />
+                </ProtectedRoute>
+              }
+            />
+            <Route 
+              path="/member/promotions" 
+              element={
+                <ProtectedRoute>
+                  <MemberPromotionsPage />
+                </ProtectedRoute>
+              }
+            />
+            {/* Add more protected routes as you create components:
+            <Route 
+              path="/member/details" 
+              element={
+                <ProtectedRoute>
+                  <MemberDetailsPage />
+                </ProtectedRoute>
+              }
+            />
+            */}
           </Routes>
 
           {/* Footer */}
