@@ -19,8 +19,8 @@ function Promotions() {
       setLoading(true);
       setError(null);
 
-      // Get person IDs linked to this user
-      const personIds = await getMyPersons(user.id);
+      // Get person IDs linked to this user - NOW USING API INSTEAD OF DIRECT SUPABASE
+      const personIds = await getMyPersons(); // Removed the user.id parameter
 
       if (personIds.length === 0) {
         setError('No student profiles linked to your account. Please contact us.');

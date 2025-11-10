@@ -1,6 +1,22 @@
 import { supabase } from '../config/supabase';
 
-const API_BASE_URL = 'https://kswapp.onrender.com';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL
+
+/**
+ * Helper function to get the authentication headers
+ */
+const getAuthHeaders = async () => {
+  const { data: { session } } = await supabase.auth.getSession();
+  
+  if (!session) {
+    throw new Error('No active session');
+  }
+  
+  return {
+    'Content-Type': 'application/json',
+    'Authorization': `Bearer ${session.access_token}`
+  };
+};
 
 // Helper to get auth token
 const getAuthToken = async () => {
@@ -87,7 +103,27 @@ export const getAllClasses = async () => {
   return publicApiCall(`/class/`);
 };
 
-
+export const getMyPersons = async () => {
+  try {
+    const headers = await getAuthHeaders();
+    
+    const response = await fetch(`${API_BASE_URL}/users/me/persons`, {
+      method: 'GET',
+      headers: headers,
+    });
+    
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.detail || 'Failed to fetch person IDs');
+    }
+    
+    const personIds = await response.json();
+    return personIds;
+  } catch (error) {
+    console.error('Error fetching person IDs:', error);
+    throw error;
+  }
+};
 
 
 // Get cancelled classes
@@ -157,45 +193,6 @@ export const getNews = async () => {
 
 
   return data;
-
-
-};
-
-
-
-
-
-// Get linked persons for current user
-
-
-export const getMyPersons = async (userId) => {
-
-
-  // First get user_person links
-
-
-  const { data, error } = await supabase
-
-
-    .from('user_person')
-
-
-    .select('person_id')
-
-
-    .eq('user_id', userId);
-
-
-
-
-
-  if (error) throw error;
-
-
-  
-
-
-  return data.map(up => up.person_id);
 
 
 };
