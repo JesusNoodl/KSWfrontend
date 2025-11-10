@@ -107,17 +107,32 @@ export const getMyPersons = async () => {
   try {
     const headers = await getAuthHeaders();
     
-    const response = await fetch(`${API_BASE_URL}/users/me/persons`, {
+    const response = await fetch(`${API_BASE_URL}/person/me/persons`, {
       method: 'GET',
       headers: headers,
     });
     
+    // Log the response for debugging
+    console.log('Response status:', response.status);
+    console.log('Response headers:', response.headers);
+    
+    // Get the raw text first to see what we're actually receiving
+    const rawText = await response.text();
+    console.log('Raw response:', rawText);
+    
     if (!response.ok) {
-      const error = await response.json();
-      throw new Error(error.detail || 'Failed to fetch person IDs');
+      // Try to parse as JSON, but handle if it's not
+      try {
+        const error = JSON.parse(rawText);
+        throw new Error(error.detail || 'Failed to fetch person IDs');
+      } catch (parseError) {
+        // If it's not JSON, throw the raw text
+        throw new Error(`Server error: ${rawText}`);
+      }
     }
     
-    const personIds = await response.json();
+    // Parse the successful response
+    const personIds = JSON.parse(rawText);
     return personIds;
   } catch (error) {
     console.error('Error fetching person IDs:', error);
