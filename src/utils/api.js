@@ -22,8 +22,26 @@ const apiCall = async (endpoint, options = {}) => {
   });
 
   if (!response.ok) {
-    const error = await response.json();
+    const error = await response.json().catch(() => ({ detail: 'API request failed' }));
     throw new Error(error.detail || 'API request failed');
+  }
+
+  return response.json();
+};
+
+// Public API call wrapper (no auth required)
+const publicApiCall = async (endpoint, options = {}) => {
+  const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+    ...options,
+    headers: {
+      'Content-Type': 'application/json',
+      ...options.headers,
+    },
+  });
+
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({ detail: 'API request failed' }));
+    throw new Error(error.detail || `API request failed: ${response.status} ${response.statusText}`);
   }
 
   return response.json();
@@ -59,57 +77,7 @@ export const getLocation = async (locationId) => {
   return apiCall(`/location/${locationId}`);
 };
 
-// Get calendar events for a specific month and year
+// Get calendar events for a specific month and year (public endpoint)
 export const getCalendarEvents = async (year, month) => {
-  return apiCall(`/calendar/year/${year}/month/${month}`);
-};
-
-// Get linked persons for current user
-export const getMyPersons = async (userId) => {
-  // First get user_person links
-  const { data, error } = await supabase
-    .from('user_person')
-    .select('person_id')
-    .eq('user_id', userId);
-
-  if (error) throw error;
-
-  return data.map(up => up.person_id);
-};
-
-// Get cancelled classes
-export const getCancelledClasses = async () => {
-  const { data, error } = await supabase
-    .from('class_exception')
-    .select('*, class(*)')
-    .eq('cancelled', true)
-    .gte('date', new Date().toISOString().split('T')[0])
-    .order('date', { ascending: true });
-
-  if (error) throw error;
-  return data;
-};
-
-// Get news
-export const getNews = async () => {
-  const { data, error } = await supabase
-    .from('news')
-    .select('*')
-    .not('published_at', 'is', null)
-    .order('published_at', { ascending: false });
-
-  if (error) throw error;
-  return data;
-};
-
-// Get all classes
-export const getAllClasses = async () => {
-  const { data, error } = await supabase
-    .from('full_calendar')
-    .select('*')
-    .eq('calendar_type', 'class')
-    .order('date', { ascending: true });
-
-  if (error) throw error;
-  return data;
+  return publicApiCall(`/calendar/year/${year}/month/${month}`);
 };
