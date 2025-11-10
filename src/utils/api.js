@@ -63,3 +63,53 @@ export const getLocation = async (locationId) => {
 export const getCalendarEvents = async (year, month) => {
   return apiCall(`/calendar/year/${year}/month/${month}`);
 };
+
+// Get linked persons for current user
+export const getMyPersons = async (userId) => {
+  // First get user_person links
+  const { data, error } = await supabase
+    .from('user_person')
+    .select('person_id')
+    .eq('user_id', userId);
+
+  if (error) throw error;
+
+  return data.map(up => up.person_id);
+};
+
+// Get cancelled classes
+export const getCancelledClasses = async () => {
+  const { data, error } = await supabase
+    .from('class_exception')
+    .select('*, class(*)')
+    .eq('cancelled', true)
+    .gte('date', new Date().toISOString().split('T')[0])
+    .order('date', { ascending: true });
+
+  if (error) throw error;
+  return data;
+};
+
+// Get news
+export const getNews = async () => {
+  const { data, error } = await supabase
+    .from('news')
+    .select('*')
+    .not('published_at', 'is', null)
+    .order('published_at', { ascending: false });
+
+  if (error) throw error;
+  return data;
+};
+
+// Get all classes
+export const getAllClasses = async () => {
+  const { data, error } = await supabase
+    .from('full_calendar')
+    .select('*')
+    .eq('calendar_type', 'class')
+    .order('date', { ascending: true });
+
+  if (error) throw error;
+  return data;
+};
