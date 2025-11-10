@@ -6,11 +6,17 @@ const API_BASE_URL = import.meta.env.VITE_API_BASE_URL
  * Helper function to get the authentication headers
  */
 const getAuthHeaders = async () => {
-  const { data: { session } } = await supabase.auth.getSession();
+  const { data: { session }, error } = await supabase.auth.getSession();
+  
+  console.log('Session error:', error);
+  console.log('Session exists:', !!session);
   
   if (!session) {
     throw new Error('No active session');
   }
+  
+  console.log('Access token (first 20 chars):', session.access_token?.substring(0, 20));
+  console.log('Token expiry:', new Date(session.expires_at * 1000));
   
   return {
     'Content-Type': 'application/json',
