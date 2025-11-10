@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { supabase } from '../config/supabase';
+import { getAllClasses } from '../services/api';
 
 function Schedule() {
   const [classes, setClasses] = useState([]);
@@ -9,13 +9,13 @@ function Schedule() {
   const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
   
   const dayNumberToName = {
-    0: 'Monday',
-    1: 'Tuesday',
-    2: 'Wednesday',
-    3: 'Thursday',
-    4: 'Friday',
-    5: 'Saturday',
-    6: 'Sunday'
+    0: 'Sunday',
+    1: 'Monday',
+    2: 'Tuesday',
+    3: 'Wednesday',
+    4: 'Thursday',
+    5: 'Friday',
+    6: 'Saturday'
   };
 
   useEffect(() => {
@@ -25,21 +25,41 @@ function Schedule() {
   const fetchClasses = async () => {
     try {
       setLoading(true);
+      setError(null);
       
-      const { data, error } = await supabase
-        .from('class')
-        .select('*')
-        .order('day_number', { ascending: true })
-        .order('start_time', { ascending: true });
-
-      if (error) throw error;
-
-      const activeClasses = data?.filter(cls => cls.is_active === true) || [];
+      console.log('Fetching classes from API...');
+      const data = await getAllClasses();
+      
+      // Filter for active classes based on active_from and active_to dates
+      const now = new Date();
+      const activeClasses = data?.filter(cls => {
+        // If no active dates set, class is always active
+        if (!cls.active_from && !cls.active_to) return true;
+        
+        const activeFrom = cls.active_from ? new Date(cls.active_from) : null;
+        const activeTo = cls.active_to ? new Date(cls.active_to) : null;
+        
+        // Check if current date is within active range
+        if (activeFrom && now < activeFrom) return false;
+        if (activeTo && now > activeTo) return false;
+        
+        return true;
+      }) || [];
+      
+      // Sort by day_number and then start_time
+      activeClasses.sort((a, b) => {
+        if (a.day_number !== b.day_number) {
+          return a.day_number - b.day_number;
+        }
+        return a.start_time.localeCompare(b.start_time);
+      });
+      
       setClasses(activeClasses);
+      console.log('Fetched classes from API:', activeClasses);
       
     } catch (error) {
       console.error('Error fetching classes:', error);
-      setError(error.message);
+      setError(`Failed to load schedule: ${error.message}. Please check your internet connection and try again.`);
     } finally {
       setLoading(false);
     }

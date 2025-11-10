@@ -82,40 +82,10 @@ export const getCalendarEvents = async (year, month) => {
   return publicApiCall(`/calendar/year/${year}/month/${month}`);
 };
 
-
-
-// Get all classes
-
-
+// Get all classes (public endpoint)
 export const getAllClasses = async () => {
-
-
-  const { data, error } = await supabase
-
-
-    .from('full_calendar')
-
-
-    .select('*')
-
-
-    .eq('calendar_type', 'class')
-
-
-    .order('date', { ascending: true });
-
-
-
-
-
-  if (error) throw error;
-
-
-  return data;
-
-
+  return publicApiCall(`/class/`);
 };
-
 
 
 
