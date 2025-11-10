@@ -106,8 +106,12 @@ export const getAllClasses = async () => {
 export const getMyPersons = async () => {
   try {
     const headers = await getAuthHeaders();
+    const url = `${API_BASE_URL}/persons/me/persons`; // or /person/me/persons
     
-    const response = await fetch(`${API_BASE_URL}/person/me/persons`, {
+    console.log('Full URL being called:', url);
+    console.log('API_BASE_URL:', API_BASE_URL);
+    
+    const response = await fetch(url, {
       method: 'GET',
       headers: headers,
     });
