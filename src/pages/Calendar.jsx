@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { supabase } from '../config/supabase';
+import { getCalendarEvents } from '../utils/api';
 
 export const revalidate = 0;
 export const dynamic = 'force-dynamic';
@@ -18,34 +18,15 @@ function Calendar() {
   const fetchEvents = async () => {
     try {
       setLoading(true);
+      setError(null);
       
       const year = currentDate.getFullYear();
-      const month = currentDate.getMonth();
-      const firstDay = new Date(year, month, 1);
-      const lastDay = new Date(year, month + 1, 0);
+      const month = currentDate.getMonth() + 1; // JavaScript months are 0-indexed, API expects 1-indexed
       
-      const formatDate = (date) => {
-        const y = date.getFullYear();
-        const m = String(date.getMonth() + 1).padStart(2, '0');
-        const d = String(date.getDate()).padStart(2, '0');
-        return `${y}-${m}-${d}`;
-      };
+      const data = await getCalendarEvents(year, month);
       
-      const firstDateStr = formatDate(firstDay);
-      const lastDateStr = formatDate(lastDay);
-      
-      const { data, error } = await supabase
-        .from('full_calendar') 
-        .select('*')
-        .gte('date', firstDateStr)
-        .lte('date', lastDateStr)
-        .order('date', { ascending: true })
-        .order('start_time', { ascending: true });
-
-      if (error) throw error;
-
       setEvents(data || []);
-      console.log('Fetched events:', data);
+      console.log('Fetched events from API:', data);
       
     } catch (error) {
       console.error('Error fetching events:', error);
