@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { getAllClasses } from '../services/api';
+import { getAllClasses } from '../utils/api';
 
 function Schedule() {
   const [classes, setClasses] = useState([]);
