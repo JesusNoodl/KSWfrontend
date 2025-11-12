@@ -150,6 +150,38 @@ export const getMyPersons = async () => {
   }
 };
 
+// Get person IDs linked to current user
+export const getMyPersonIds = async () => {
+  return apiCall(`/person/me/persons`);
+};
+
+// Get full person details by ID
+export const getPersonById = async (personId) => {
+  return apiCall(`/person/${personId}`);
+};
+
+// Get all my persons with full details (combines both calls)
+export const getMyPersonsDetails = async () => {
+  try {
+    // Step 1: Get the person IDs
+    const personIds = await getMyPersonIds();
+    
+    if (!personIds || personIds.length === 0) {
+      return [];
+    }
+    
+    // Step 2: Fetch full details for each person in parallel
+    const personPromises = personIds.map(personId => getPersonById(personId));
+    const people = await Promise.all(personPromises);
+    
+    // Step 3: Filter to only active people
+    return people.filter(person => person && person.active === true);
+  } catch (error) {
+    console.error('Error fetching person details:', error);
+    throw error;
+  }
+};
+
 
 // Get cancelled classes
 

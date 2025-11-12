@@ -15,7 +15,7 @@ function MemberLayout() {
 
   const navItems = [
     { path: '/member', label: 'Dashboard', icon: '🏠' },
-    { path: '/member/details', label: 'My Details', icon: '👤' },
+    { path: '/member/student_details', label: 'Student Details', icon: '👤' },
     { path: '/member/promotions', label: 'Promotions', icon: '🥋' },
     { path: '/member/classes', label: 'My Classes', icon: '📅' },
     { path: '/member/news', label: 'News', icon: '📰' },
