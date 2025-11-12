@@ -10,6 +10,7 @@ import Contact from './pages/Contact';
 import Calendar from './pages/Calendar';
 import Login from './pages/Login';
 import News from './pages/News';
+import MemberLayout from './components/member/MemberLayout';
 import MemberDashboard from './pages/member/MemberDashboard';
 import MemberPromotionsPage from './pages/member/MemberPromotionsPage';
 import { SpeedInsights } from '@vercel/speed-insights/react';
@@ -20,7 +21,6 @@ function App() {
       <Router>
         <div className="min-h-screen bg-black">
           <Navbar />
-          
           <Routes>
             {/* Public Routes */}
             <Route path="/" element={<Home />} />
@@ -32,33 +32,28 @@ function App() {
             <Route path="/news" element={<News />} />
             <Route path="/login" element={<Login />} />
 
-            {/* Protected Member Routes */}
-            <Route 
-              path="/member" 
+            {/* Protected Member Routes - All nested under MemberLayout */}
+            <Route
+              path="/member"
               element={
                 <ProtectedRoute>
-                  <MemberDashboard />
+                  <MemberLayout />
                 </ProtectedRoute>
               }
-            />
-            <Route 
-              path="/member/promotions" 
-              element={
-                <ProtectedRoute>
-                  <MemberPromotionsPage />
-                </ProtectedRoute>
-              }
-            />
-            {/* Add more protected routes as you create components:
-            <Route 
-              path="/member/details" 
-              element={
-                <ProtectedRoute>
-                  <MemberDetailsPage />
-                </ProtectedRoute>
-              }
-            />
-            */}
+            >
+              {/* index route - shows when path is exactly /member */}
+              <Route index element={<MemberDashboard />} />
+              
+              {/* Child routes - automatically get /member prefix */}
+              <Route path="promotions" element={<MemberPromotionsPage />} />
+              
+              {/* Add more protected routes as you create components */}
+              {/* <Route path="details" element={<MemberDetailsPage />} /> */}
+              {/* <Route path="classes" element={<MemberClassesPage />} /> */}
+              {/* <Route path="news" element={<MemberNewsPage />} /> */}
+              {/* <Route path="locations" element={<MemberLocationsPage />} /> */}
+              {/* <Route path="cancelled" element={<MemberCancelledPage />} /> */}
+            </Route>
           </Routes>
 
           {/* Footer */}
