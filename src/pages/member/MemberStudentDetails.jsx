@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { AlertCircle, User, Calendar, Award, Shield } from 'lucide-react';
-import { getMyPersonsDetails } from '../api/api';
+import { getMyPersonsDetails } from '../../utils/api';
 
 const StudentDetailsPage = () => {
   const [people, setPeople] = useState([]);
