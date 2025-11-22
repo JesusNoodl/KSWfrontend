@@ -160,6 +160,11 @@ export const getPersonById = async (personId) => {
   return apiCall(`/person/${personId}`);
 };
 
+// Get awards for a student
+export const getAwardsForStudent = async (studentId) => {
+  return apiCall(`/awards/student/${studentId}`);
+};
+
 // Get all my persons with full details (combines both calls)
 export const getMyPersonsDetails = async () => {
   try {

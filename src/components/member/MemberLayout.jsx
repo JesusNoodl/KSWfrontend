@@ -17,6 +17,7 @@ function MemberLayout() {
     { path: '/member', label: 'Dashboard', icon: '🏠' },
     { path: '/member/student_details', label: 'Student Details', icon: '👤' },
     { path: '/member/promotions', label: 'Promotions', icon: '🥋' },
+    { path: '/member/awards', label: 'Awards', icon: '🏆' },
     { path: '/member/classes', label: 'My Classes', icon: '📅' },
     { path: '/member/news', label: 'News', icon: '📰' },
     { path: '/member/locations', label: 'Locations', icon: '📍' },
