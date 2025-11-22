@@ -48,7 +48,15 @@ function MemberAwardsPage() {
 
   const loadAwards = async (personId) => {
     try {
+      console.log('Loading awards for person:', personId);
       const studentAwards = await getAwardsForStudent(personId);
+      console.log('Awards received:', studentAwards);
+
+      // Handle case where no awards exist (return empty array instead of error)
+      if (!studentAwards || studentAwards.length === 0) {
+        setAwards([]);
+        return;
+      }
 
       // Sort by date (most recent first)
       studentAwards.sort((a, b) => new Date(b.date_achieved) - new Date(a.date_achieved));
@@ -56,7 +64,12 @@ function MemberAwardsPage() {
       setAwards(studentAwards);
     } catch (err) {
       console.error('Error loading awards:', err);
-      setError(err.message);
+      // If it's a 404 (no awards found), just set empty array instead of showing error
+      if (err.message.includes('404') || err.message.includes('not found')) {
+        setAwards([]);
+      } else {
+        setError(err.message);
+      }
     }
   };
 
