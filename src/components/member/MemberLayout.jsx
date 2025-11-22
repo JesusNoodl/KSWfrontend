@@ -18,10 +18,6 @@ function MemberLayout() {
     { path: '/member/student_details', label: 'Student Details', icon: '👤' },
     { path: '/member/promotions', label: 'Promotions', icon: '🥋' },
     { path: '/member/awards', label: 'Awards', icon: '🏆' },
-    { path: '/member/classes', label: 'My Classes', icon: '📅' },
-    { path: '/member/news', label: 'News', icon: '📰' },
-    { path: '/member/locations', label: 'Locations', icon: '📍' },
-    { path: '/member/cancelled', label: 'Cancelled Classes', icon: '🚫' },
   ];
 
   return (
