@@ -105,8 +105,17 @@ function MemberAwardsPage() {
       internal: 'bg-blue-600 text-white',
       achievement: 'bg-green-600 text-white',
       special: 'bg-orange-600 text-white',
+      class: 'bg-[#ff6d00] text-white',
     };
     return colorMap[type?.toLowerCase()] || 'bg-gray-600 text-white';
+  };
+
+  const getAwardCardBackground = (type) => {
+    // Highlight "class" awards with a different background
+    if (type?.toLowerCase() === 'class') {
+      return 'bg-gradient-to-r from-[#2e2e2e] to-[#3d2410] border-l-4 border-[#ff6d00]';
+    }
+    return 'bg-[#2e2e2e] border-l-4 border-[#ff6d00]';
   };
 
   if (loading && persons.length === 0) {
@@ -185,7 +194,7 @@ function MemberAwardsPage() {
             {awards.map((award) => (
               <div
                 key={award.id}
-                className="bg-[#2e2e2e] rounded-xl p-6 border-l-4 border-[#ff6d00] hover:bg-[#3d3d3d] transition-all duration-300"
+                className={`rounded-xl p-6 hover:bg-[#3d3d3d] transition-all duration-300 ${getAwardCardBackground(award.award_type)}`}
               >
                 <div className="flex flex-wrap justify-between items-start gap-4">
                   <div className="flex-1 min-w-[200px]">
@@ -194,9 +203,11 @@ function MemberAwardsPage() {
                       <span className={`px-3 py-1 rounded-lg text-sm font-bold ${getAwardTypeColor(award.award_type)}`}>
                         {award.award_type}
                       </span>
-                      <span className="bg-yellow-500 text-gray-900 px-3 py-1 rounded-lg text-sm font-bold">
-                        {award.points} pts
-                      </span>
+                      {award.points != null && (
+                        <span className="bg-yellow-500 text-gray-900 px-3 py-1 rounded-lg text-sm font-bold">
+                          {award.points} pts
+                        </span>
+                      )}
                     </div>
 
                     {award.belt_at_time && (
