@@ -187,74 +187,53 @@ export const getMyPersonsDetails = async () => {
   }
 };
 
-
-// Get cancelled classes
-
-
-export const getCancelledClasses = async () => {
-
-
-  const { data, error } = await supabase
-
-
-    .from('class_exception')
-
-
-    .select('*, class(*)')
-
-
-    .eq('cancelled', true)
-
-
-    .gte('date', new Date().toISOString().split('T')[0])
-
-
-    .order('date', { ascending: true });
-
-
-
-
-
-  if (error) throw error;
-
-
-  return data;
-
-
+// Get all contacts for the current user
+export const getMyContacts = async () => {
+  return apiCall(`/contacts/`);
 };
 
+// Get a specific contact by ID
+export const getContact = async (contactId) => {
+  return apiCall(`/contacts/${contactId}`);
+};
 
+// Create a new contact
+export const createContact = async (contactData) => {
+  return apiCall(`/contacts/`, {
+    method: 'POST',
+    body: JSON.stringify(contactData),
+  });
+};
 
+// Update an existing contact
+export const updateContact = async (contactId, contactData) => {
+  return apiCall(`/contacts/${contactId}`, {
+    method: 'PUT',
+    body: JSON.stringify(contactData),
+  });
+};
 
+// Delete a contact
+export const deleteContact = async (contactId) => {
+  const token = await getAuthToken();
+  
+  const response = await fetch(`${API_BASE_URL}/contacts/${contactId}`, {
+    method: 'DELETE',
+    headers: {
+      'Authorization': `Bearer ${token}`,
+    },
+  });
 
-// Get news
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({ detail: 'Failed to delete contact' }));
+    throw new Error(error.detail || 'Failed to delete contact');
+  }
 
+  // DELETE returns 204 No Content, so don't try to parse JSON
+  return true;
+};
 
-export const getNews = async () => {
-
-
-  const { data, error } = await supabase
-
-
-    .from('news')
-
-
-    .select('*')
-
-
-    .not('published_at', 'is', null)
-
-
-    .order('published_at', { ascending: false });
-
-
-
-
-
-  if (error) throw error;
-
-
-  return data;
-
-
+// Get contacts for a specific user (admin only)
+export const getContactsForUser = async (userId) => {
+  return apiCall(`/contacts/user/${userId}`);
 };

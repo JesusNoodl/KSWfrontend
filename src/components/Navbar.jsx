@@ -79,7 +79,7 @@ function Navbar() {
               News
             </Link>
             <Link 
-              to="/contact" 
+              to="/contacts" 
               className={`${
                 isActive('/contact') 
                   ? 'text-white bg-[#ff6d00]' 

@@ -15,6 +15,7 @@ import MemberDashboard from './pages/member/MemberDashboard';
 import MemberPromotions from './pages/member/MemberPromotionsPage';
 import MemberStudentDetails from './pages/member/MemberStudentDetails';
 import MemberAwards from './pages/member/MemberAwards';
+import MemberContacts from './pages/member/MemberContacts';
 import { SpeedInsights } from '@vercel/speed-insights/react';
 
 function App() {
@@ -54,6 +55,9 @@ function App() {
 
               {/* Child routes - automatically get /member prefix */}
               <Route path="awards" element={<MemberAwards />} />
+
+              {/* Child routes - automatically get /member prefix */}
+              <Route path="contacts" element={<MemberContacts />} />
               
               {/* Add more protected routes as you create components */}
               {/* <Route path="details" element={<MemberDetailsPage />} /> */}
