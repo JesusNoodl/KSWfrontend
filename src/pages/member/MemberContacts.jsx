@@ -1,21 +1,20 @@
 // src/pages/MemberContacts.jsx
 import React, { useState, useEffect } from 'react';
-import { supabase } from '../config/supabase';
+import { useAuth } from '../contexts/AuthContext';
 import { 
   getMyContacts, 
   createContact, 
   updateContact, 
   deleteContact 
 } from '../../utils/api';
-import '../../App.css';
 
 const MemberContacts = () => {
+  const { user, loading: authLoading } = useAuth(); // Get user from context
   const [contacts, setContacts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [showForm, setShowForm] = useState(false);
   const [editingContact, setEditingContact] = useState(null);
-  const [userId, setUserId] = useState(null);
 
   // Form state
   const [formData, setFormData] = useState({
@@ -30,23 +29,12 @@ const MemberContacts = () => {
     secondary_phone_number: ''
   });
 
-  // Get current user ID
+  // Fetch contacts when user is available
   useEffect(() => {
-    const fetchUserId = async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (user) {
-        setUserId(user.id);
-      }
-    };
-    fetchUserId();
-  }, []);
-
-  // Fetch contacts
-  useEffect(() => {
-    if (userId) {
+    if (user && !authLoading) {
       fetchContacts();
     }
-  }, [userId]);
+  }, [user, authLoading]);
 
   const fetchContacts = async () => {
     try {
@@ -98,7 +86,7 @@ const MemberContacts = () => {
         primary_phone_number: parseInt(formData.primary_phone_number),
         relation: formData.relation,
         address_id: parseInt(formData.address_id),
-        user_id: userId,
+        user_id: user.id, // Get user_id from context
         country_calling_code: formData.country_calling_code,
         email: formData.email || null,
         secondary_phone_number: formData.secondary_phone_number ? parseInt(formData.secondary_phone_number) : null,
@@ -154,10 +142,22 @@ const MemberContacts = () => {
     }
   };
 
-  if (loading) {
+  // Show loading state while auth is initializing
+  if (authLoading || loading) {
     return (
       <div className="member-container">
         <div className="loading">Loading contacts...</div>
+      </div>
+    );
+  }
+
+  // If no user, they shouldn't be here (this should be handled by routing)
+  if (!user) {
+    return (
+      <div className="member-container">
+        <div className="error-message">
+          Please log in to view your contacts.
+        </div>
       </div>
     );
   }
