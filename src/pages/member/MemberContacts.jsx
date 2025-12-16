@@ -28,7 +28,7 @@ const MemberContacts = () => {
     house_number: '',
     street_name: '',
     house_name: '',
-    town: '',
+    postcode: '',
     city: ''
   });
 
@@ -73,7 +73,7 @@ const MemberContacts = () => {
       house_number: '',
       street_name: '',
       house_name: '',
-      town: '',
+      postcode: '',
       city: ''
     });
     setEditingContact(null);
@@ -97,7 +97,7 @@ const MemberContacts = () => {
         house_number: formData.house_number ? parseInt(formData.house_number) : null,
         street_name: formData.street_name || null,
         house_name: formData.house_name || null,
-        town: formData.town || null,
+        postcode: formData.postcode || null,
         city: formData.city || null
       };
 
@@ -129,7 +129,7 @@ const MemberContacts = () => {
       house_number: contact.house_number ? contact.house_number.toString() : '',
       street_name: contact.street_name || '',
       house_name: contact.house_name || '',
-      town: contact.town || '',
+      postcode: contact.postcode || '',
       city: contact.city || ''
     });
     setEditingContact(contact);
@@ -387,12 +387,12 @@ const MemberContacts = () => {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-gray-300 mb-2 font-semibold">
-                    Town
+                    Post Code
                   </label>
                   <input
                     type="text"
-                    name="town"
-                    value={formData.town}
+                    name="postcode"
+                    value={formData.postcode}
                     onChange={handleInputChange}
                     placeholder="e.g. Fakenham"
                     className="w-full px-4 py-3 bg-[#2e2e2e] border-2 border-[#3d3d3d] rounded-lg text-white placeholder-gray-500 focus:border-[#ff6d00] focus:outline-none transition-colors"
@@ -483,7 +483,7 @@ const MemberContacts = () => {
                       <span className="text-gray-300 break-all">{contact.email}</span>
                     </div>
                   )}
-                  {(contact.house_number || contact.house_name || contact.street_name || contact.town || contact.city) && (
+                  {(contact.house_number || contact.house_name || contact.street_name || contact.city || contact.postcode) && (
                     <div className="flex gap-2">
                       <span className="text-[#ff6d00] font-semibold min-w-[80px]">Address:</span>
                       <span className="text-gray-300">
@@ -491,8 +491,8 @@ const MemberContacts = () => {
                           contact.house_name,
                           contact.house_number,
                           contact.street_name,
-                          contact.town,
-                          contact.city
+                          contact.city,
+                          contact.postcode
                         ].filter(Boolean).join(', ')}
                       </span>
                     </div>
@@ -519,28 +519,6 @@ const MemberContacts = () => {
           </div>
         )}
       </div>
-
-      {/* Stats Summary */}
-      {contacts.length > 0 && (
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div className="bg-[#1a1a1a] rounded-xl p-6 border-2 border-[#3d3d3d] text-center">
-            <p className="text-gray-400 mb-2">Total Contacts</p>
-            <p className="text-4xl font-black text-[#ff6d00]">{contacts.length}</p>
-          </div>
-          <div className="bg-[#1a1a1a] rounded-xl p-6 border-2 border-[#3d3d3d] text-center">
-            <p className="text-gray-400 mb-2">Primary Contacts</p>
-            <p className="text-4xl font-black text-green-500">
-              {contacts.filter(c => c.is_primary).length}
-            </p>
-          </div>
-          <div className="bg-[#1a1a1a] rounded-xl p-6 border-2 border-[#3d3d3d] text-center">
-            <p className="text-gray-400 mb-2">With Email</p>
-            <p className="text-4xl font-black text-blue-500">
-              {contacts.filter(c => c.email).length}
-            </p>
-          </div>
-        </div>
-      )}
     </div>
   );
 };
