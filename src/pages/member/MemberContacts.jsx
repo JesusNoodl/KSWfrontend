@@ -22,10 +22,14 @@ const MemberContacts = () => {
     is_primary: false,
     primary_phone_number: '',
     relation: '',
-    address_id: '',
     country_calling_code: '+44',
     email: '',
-    secondary_phone_number: ''
+    secondary_phone_number: '',
+    house_number: '',
+    street_name: '',
+    house_name: '',
+    town: '',
+    city: ''
   });
 
   useEffect(() => {
@@ -63,10 +67,14 @@ const MemberContacts = () => {
       is_primary: false,
       primary_phone_number: '',
       relation: '',
-      address_id: '',
       country_calling_code: '+44',
       email: '',
-      secondary_phone_number: ''
+      secondary_phone_number: '',
+      house_number: '',
+      street_name: '',
+      house_name: '',
+      town: '',
+      city: ''
     });
     setEditingContact(null);
     setShowForm(false);
@@ -82,11 +90,15 @@ const MemberContacts = () => {
         is_primary: formData.is_primary,
         primary_phone_number: parseInt(formData.primary_phone_number),
         relation: formData.relation,
-        address_id: parseInt(formData.address_id),
         user_id: user.id,
         country_calling_code: formData.country_calling_code,
         email: formData.email || null,
         secondary_phone_number: formData.secondary_phone_number ? parseInt(formData.secondary_phone_number) : null,
+        house_number: formData.house_number ? parseInt(formData.house_number) : null,
+        street_name: formData.street_name || null,
+        house_name: formData.house_name || null,
+        town: formData.town || null,
+        city: formData.city || null
       };
 
       if (editingContact) {
@@ -111,10 +123,14 @@ const MemberContacts = () => {
       is_primary: contact.is_primary,
       primary_phone_number: contact.primary_phone_number.toString(),
       relation: contact.relation,
-      address_id: contact.address_id.toString(),
       country_calling_code: contact.country_calling_code,
       email: contact.email || '',
-      secondary_phone_number: contact.secondary_phone_number ? contact.secondary_phone_number.toString() : ''
+      secondary_phone_number: contact.secondary_phone_number ? contact.secondary_phone_number.toString() : '',
+      house_number: contact.house_number ? contact.house_number.toString() : '',
+      street_name: contact.street_name || '',
+      house_name: contact.house_name || '',
+      town: contact.town || '',
+      city: contact.city || ''
     });
     setEditingContact(contact);
     setShowForm(true);
@@ -321,20 +337,81 @@ const MemberContacts = () => {
               </div>
             </div>
 
-            {/* Address ID */}
-            <div>
-              <label className="block text-gray-300 mb-2 font-semibold">
-                Address ID <span className="text-red-500">*</span>
-              </label>
-              <input
-                type="number"
-                name="address_id"
-                value={formData.address_id}
-                onChange={handleInputChange}
-                required
-                className="w-full px-4 py-3 bg-[#2e2e2e] border-2 border-[#3d3d3d] rounded-lg text-white focus:border-[#ff6d00] focus:outline-none transition-colors"
-              />
-              <p className="text-gray-500 text-sm mt-1">Enter the address ID for this contact</p>
+            {/* Address Section */}
+            <div className="border-t border-[#3d3d3d] pt-6 mt-2">
+              <h4 className="text-lg font-bold text-[#ff6d00] mb-4">Address (Optional)</h4>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                <div>
+                  <label className="block text-gray-300 mb-2 font-semibold">
+                    House Number
+                  </label>
+                  <input
+                    type="number"
+                    name="house_number"
+                    value={formData.house_number}
+                    onChange={handleInputChange}
+                    placeholder="e.g. 42"
+                    className="w-full px-4 py-3 bg-[#2e2e2e] border-2 border-[#3d3d3d] rounded-lg text-white placeholder-gray-500 focus:border-[#ff6d00] focus:outline-none transition-colors"
+                  />
+                </div>
+                <div>
+                  <label className="block text-gray-300 mb-2 font-semibold">
+                    House Name
+                  </label>
+                  <input
+                    type="text"
+                    name="house_name"
+                    value={formData.house_name}
+                    onChange={handleInputChange}
+                    placeholder="e.g. Rose Cottage"
+                    className="w-full px-4 py-3 bg-[#2e2e2e] border-2 border-[#3d3d3d] rounded-lg text-white placeholder-gray-500 focus:border-[#ff6d00] focus:outline-none transition-colors"
+                  />
+                </div>
+              </div>
+
+              <div className="mb-4">
+                <label className="block text-gray-300 mb-2 font-semibold">
+                  Street Name
+                </label>
+                <input
+                  type="text"
+                  name="street_name"
+                  value={formData.street_name}
+                  onChange={handleInputChange}
+                  placeholder="e.g. High Street"
+                  className="w-full px-4 py-3 bg-[#2e2e2e] border-2 border-[#3d3d3d] rounded-lg text-white placeholder-gray-500 focus:border-[#ff6d00] focus:outline-none transition-colors"
+                />
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-gray-300 mb-2 font-semibold">
+                    Town
+                  </label>
+                  <input
+                    type="text"
+                    name="town"
+                    value={formData.town}
+                    onChange={handleInputChange}
+                    placeholder="e.g. Fakenham"
+                    className="w-full px-4 py-3 bg-[#2e2e2e] border-2 border-[#3d3d3d] rounded-lg text-white placeholder-gray-500 focus:border-[#ff6d00] focus:outline-none transition-colors"
+                  />
+                </div>
+                <div>
+                  <label className="block text-gray-300 mb-2 font-semibold">
+                    City
+                  </label>
+                  <input
+                    type="text"
+                    name="city"
+                    value={formData.city}
+                    onChange={handleInputChange}
+                    placeholder="e.g. Norwich"
+                    className="w-full px-4 py-3 bg-[#2e2e2e] border-2 border-[#3d3d3d] rounded-lg text-white placeholder-gray-500 focus:border-[#ff6d00] focus:outline-none transition-colors"
+                  />
+                </div>
+              </div>
             </div>
 
             {/* Form Actions */}
@@ -404,6 +481,20 @@ const MemberContacts = () => {
                     <div className="flex gap-2">
                       <span className="text-[#ff6d00] font-semibold min-w-[80px]">Email:</span>
                       <span className="text-gray-300 break-all">{contact.email}</span>
+                    </div>
+                  )}
+                  {(contact.house_number || contact.house_name || contact.street_name || contact.town || contact.city) && (
+                    <div className="flex gap-2">
+                      <span className="text-[#ff6d00] font-semibold min-w-[80px]">Address:</span>
+                      <span className="text-gray-300">
+                        {[
+                          contact.house_name,
+                          contact.house_number,
+                          contact.street_name,
+                          contact.town,
+                          contact.city
+                        ].filter(Boolean).join(', ')}
+                      </span>
                     </div>
                   )}
                 </div>
