@@ -18,6 +18,7 @@ function MemberLayout() {
     { path: '/member/student_details', label: 'Student Details', icon: '👤' },
     { path: '/member/promotions', label: 'Promotions', icon: '🥋' },
     { path: '/member/awards', label: 'Awards', icon: '🏆' },
+    { path: '/member/contacts', label: 'Contacts', icon: '📇' }
   ];
 
   return (

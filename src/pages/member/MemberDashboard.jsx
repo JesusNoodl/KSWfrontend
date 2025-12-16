@@ -13,7 +13,7 @@ function MemberDashboard() {
 
       {/* Quick Links Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <Link to="/member/details" className="bg-gradient-to-br from-[#ff6d00] to-[#e66200] rounded-2xl shadow-2xl p-6 text-white hover:scale-105 transition-transform duration-300">
+        <Link to="/member/student_details" className="bg-gradient-to-br from-[#ff6d00] to-[#e66200] rounded-2xl shadow-2xl p-6 text-white hover:scale-105 transition-transform duration-300">
           <div className="text-4xl mb-4">📋</div>
           <h3 className="text-2xl font-black mb-2">Student Details</h3>
           <p className="opacity-90">View and manage your personal information</p>
