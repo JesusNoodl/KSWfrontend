@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 import { supabase } from '../config/supabase';
+import { getUserRole } from '../utils/api';
 
 const AuthContext = createContext({});
 
@@ -14,7 +15,23 @@ export const useAuth = () => {
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [session, setSession] = useState(null);
+  const [userRole, setUserRole] = useState(null);  // 'user', 'instructor', or 'admin'
   const [loading, setLoading] = useState(true);
+  const [roleLoading, setRoleLoading] = useState(false);
+
+  // Function to fetch user role from backend
+  const fetchUserRole = async () => {
+    setRoleLoading(true);
+    try {
+      const data = await getUserRole();
+      setUserRole(data.role);
+    } catch (error) {
+      console.error('Failed to fetch user role:', error);
+      setUserRole(null);
+    } finally {
+      setRoleLoading(false);
+    }
+  };
 
   useEffect(() => {
     // Get initial session
@@ -22,6 +39,11 @@ export const AuthProvider = ({ children }) => {
       setSession(session);
       setUser(session?.user ?? null);
       setLoading(false);
+      
+      // If we have a session, fetch the user's role
+      if (session?.user) {
+        fetchUserRole();
+      }
     });
 
     // Listen for auth changes
@@ -29,6 +51,13 @@ export const AuthProvider = ({ children }) => {
       setSession(session);
       setUser(session?.user ?? null);
       setLoading(false);
+      
+      // Fetch role when user signs in, clear when they sign out
+      if (session?.user) {
+        fetchUserRole();
+      } else {
+        setUserRole(null);
+      }
     });
 
     return () => subscription.unsubscribe();
@@ -46,14 +75,26 @@ export const AuthProvider = ({ children }) => {
   const signOut = async () => {
     const { error } = await supabase.auth.signOut();
     if (error) throw error;
+    setUserRole(null);  // Clear role on sign out
   };
+
+  // Helper functions to check roles
+  const isAdmin = () => userRole === 'admin';
+  const isInstructor = () => userRole === 'instructor' || userRole === 'admin';
+  const isUser = () => !!userRole;  // Any authenticated user with a role
 
   const value = {
     user,
     session,
+    userRole,
     signIn,
     signOut,
     loading,
+    roleLoading,
+    isAdmin,
+    isInstructor,
+    isUser,
+    refetchRole: fetchUserRole,  // In case we need to manually refresh
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

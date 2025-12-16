@@ -2,7 +2,7 @@ import { useAuth } from '../../contexts/AuthContext';
 import { useNavigate, Link, useLocation, Outlet } from 'react-router-dom';
 
 function MemberLayout() {
-  const { user, signOut } = useAuth();
+  const { user, signOut, isAdmin } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -31,12 +31,24 @@ function MemberLayout() {
               <h1 className="text-2xl font-black text-white">Member Area</h1>
               <p className="text-gray-400 text-sm">{user?.email}</p>
             </div>
-            <button
-              onClick={handleSignOut}
-              className="bg-[#ff6d00] text-black px-6 py-2 rounded-lg font-bold hover:bg-[#e66200] transition"
-            >
-              Sign Out
-            </button>
+            <div className="flex items-center gap-4">
+              {/* Show Admin Area link if user is admin */}
+              {isAdmin() && (
+                <Link
+                  to="/admin"
+                  className="bg-[#3d3d3d] text-[#ff6d00] px-4 py-2 rounded-lg font-bold hover:bg-[#4d4d4d] transition flex items-center gap-2"
+                >
+                  <span>⚙️</span>
+                  <span>Admin Area</span>
+                </Link>
+              )}
+              <button
+                onClick={handleSignOut}
+                className="bg-[#ff6d00] text-black px-6 py-2 rounded-lg font-bold hover:bg-[#e66200] transition"
+              >
+                Sign Out
+              </button>
+            </div>
           </div>
         </div>
       </div>

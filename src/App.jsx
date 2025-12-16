@@ -16,6 +16,8 @@ import MemberPromotions from './pages/member/MemberPromotionsPage';
 import MemberStudentDetails from './pages/member/MemberStudentDetails';
 import MemberAwards from './pages/member/MemberAwards';
 import MemberContacts from './pages/member/MemberContacts';
+import AdminLayout from './components/admin/AdminLayout';
+import AdminDashboard from './pages/admin/AdminDashboard';
 import { SpeedInsights } from '@vercel/speed-insights/react';
 
 function App() {
@@ -65,6 +67,29 @@ function App() {
               {/* <Route path="news" element={<MemberNewsPage />} /> */}
               {/* <Route path="locations" element={<MemberLocationsPage />} /> */}
               {/* <Route path="cancelled" element={<MemberCancelledPage />} /> */}
+            </Route>
+            {/* Protected Admin Routes - Requires admin role */}
+            <Route
+              path="/admin"
+              element={
+                <AdminProtectedRoute>
+                  <AdminLayout />
+                </AdminProtectedRoute>
+              }
+            >
+              {/* Dashboard - shows when path is exactly /admin */}
+              <Route index element={<AdminDashboard />} />
+              
+              {/* Placeholder routes - create these pages as you build them */}
+              {/* <Route path="people" element={<AdminPeoplePage />} /> */}
+              {/* <Route path="people/:id" element={<AdminPersonDetailPage />} /> */}
+              {/* <Route path="enrol" element={<AdminEnrolPage />} /> */}
+              {/* <Route path="users" element={<AdminUsersPage />} /> */}
+              {/* <Route path="classes" element={<AdminClassesPage />} /> */}
+              {/* <Route path="promotions" element={<AdminPromotionsPage />} /> */}
+              {/* <Route path="awards" element={<AdminAwardsPage />} /> */}
+              {/* <Route path="events" element={<AdminEventsPage />} /> */}
+              {/* <Route path="contacts" element={<AdminContactsPage />} /> */}
             </Route>
           </Routes>
 

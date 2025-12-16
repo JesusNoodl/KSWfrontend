@@ -237,3 +237,13 @@ export const deleteContact = async (contactId) => {
 export const getContactsForUser = async (userId) => {
   return apiCall(`/contact/user/${userId}`);
 };
+
+/**
+ * Get the current user's role from the backend.
+ * This fetches the role from your database (not Supabase auth metadata).
+ * 
+ * @returns {Promise<{email: string, role: string}>} User's email and role
+ */
+export const getUserRole = async () => {
+  return apiCall('/user/me/role');
+};
