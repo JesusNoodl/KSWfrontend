@@ -9,14 +9,13 @@ import {
 } from '../../utils/api';
 
 const MemberContacts = () => {
-  const { user, loading: authLoading } = useAuth(); // Get user from context
+  const { user, loading: authLoading } = useAuth();
   const [contacts, setContacts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [showForm, setShowForm] = useState(false);
   const [editingContact, setEditingContact] = useState(null);
 
-  // Form state
   const [formData, setFormData] = useState({
     first_name: '',
     last_name: '',
@@ -29,7 +28,6 @@ const MemberContacts = () => {
     secondary_phone_number: ''
   });
 
-  // Fetch contacts when user is available
   useEffect(() => {
     if (user && !authLoading) {
       fetchContacts();
@@ -78,7 +76,6 @@ const MemberContacts = () => {
     e.preventDefault();
     
     try {
-      // Prepare data - convert phone numbers to integers and handle null values
       const submitData = {
         first_name: formData.first_name,
         last_name: formData.last_name,
@@ -86,21 +83,18 @@ const MemberContacts = () => {
         primary_phone_number: parseInt(formData.primary_phone_number),
         relation: formData.relation,
         address_id: parseInt(formData.address_id),
-        user_id: user.id, // Get user_id from context
+        user_id: user.id,
         country_calling_code: formData.country_calling_code,
         email: formData.email || null,
         secondary_phone_number: formData.secondary_phone_number ? parseInt(formData.secondary_phone_number) : null,
       };
 
       if (editingContact) {
-        // Update existing contact
         await updateContact(editingContact.id, submitData);
       } else {
-        // Create new contact
         await createContact(submitData);
       }
 
-      // Refresh contacts list
       await fetchContacts();
       resetForm();
       setError(null);
@@ -133,7 +127,6 @@ const MemberContacts = () => {
 
     try {
       await deleteContact(contactId);
-      // Refresh contacts list
       await fetchContacts();
       setError(null);
     } catch (err) {
@@ -142,20 +135,18 @@ const MemberContacts = () => {
     }
   };
 
-  // Show loading state while auth is initializing
   if (authLoading || loading) {
     return (
-      <div className="member-container">
-        <div className="loading">Loading contacts...</div>
+      <div className="bg-[#1a1a1a] rounded-2xl shadow-2xl p-8 border-2 border-[#3d3d3d]">
+        <div className="text-center text-white text-xl">Loading contacts...</div>
       </div>
     );
   }
 
-  // If no user, they shouldn't be here (this should be handled by routing)
   if (!user) {
     return (
-      <div className="member-container">
-        <div className="error-message">
+      <div className="bg-[#1a1a1a] rounded-2xl shadow-2xl p-8 border-2 border-[#3d3d3d]">
+        <div className="bg-red-900 border-2 border-red-500 text-red-200 px-6 py-4 rounded-xl">
           Please log in to view your contacts.
         </div>
       </div>
@@ -163,63 +154,84 @@ const MemberContacts = () => {
   }
 
   return (
-    <div className="member-container">
-      <div className="member-header">
-        <h1>My Contacts</h1>
-        <button 
-          className="btn-primary"
-          onClick={() => setShowForm(!showForm)}
-        >
-          {showForm ? 'Cancel' : 'Add New Contact'}
-        </button>
+    <div className="space-y-6">
+      {/* Header */}
+      <div className="bg-[#1a1a1a] rounded-2xl shadow-2xl p-6 border-2 border-[#3d3d3d]">
+        <div className="flex flex-wrap justify-between items-center gap-4">
+          <div>
+            <h2 className="text-3xl font-black text-white mb-2">My Contacts</h2>
+            <p className="text-gray-400">Manage your emergency contacts and family members</p>
+          </div>
+          <button
+            onClick={() => setShowForm(!showForm)}
+            className={`px-6 py-3 rounded-lg font-bold transition-all duration-300 ${
+              showForm 
+                ? 'bg-[#2e2e2e] text-gray-300 hover:bg-[#3d3d3d]' 
+                : 'bg-[#ff6d00] text-white hover:bg-[#e66200]'
+            }`}
+          >
+            {showForm ? 'Cancel' : '+ Add New Contact'}
+          </button>
+        </div>
       </div>
 
+      {/* Error Message */}
       {error && (
-        <div className="error-message">
-          {error}
+        <div className="bg-red-900 border-2 border-red-500 text-red-200 px-6 py-4 rounded-xl">
+          <strong>Error:</strong> {error}
         </div>
       )}
 
       {/* Contact Form */}
       {showForm && (
-        <div className="form-container">
-          <h2>{editingContact ? 'Edit Contact' : 'Add New Contact'}</h2>
-          <form onSubmit={handleSubmit} className="contact-form">
-            <div className="form-row">
-              <div className="form-group">
-                <label htmlFor="first_name">First Name *</label>
+        <div className="bg-[#1a1a1a] rounded-2xl shadow-2xl p-8 border-2 border-[#3d3d3d]">
+          <h3 className="text-2xl font-black text-[#ff6d00] mb-6">
+            {editingContact ? 'Edit Contact' : 'Add New Contact'}
+          </h3>
+          
+          <form onSubmit={handleSubmit} className="space-y-6">
+            {/* Name Row */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-gray-300 mb-2 font-semibold">
+                  First Name <span className="text-red-500">*</span>
+                </label>
                 <input
                   type="text"
-                  id="first_name"
                   name="first_name"
                   value={formData.first_name}
                   onChange={handleInputChange}
                   required
+                  className="w-full px-4 py-3 bg-[#2e2e2e] border-2 border-[#3d3d3d] rounded-lg text-white focus:border-[#ff6d00] focus:outline-none transition-colors"
                 />
               </div>
-              
-              <div className="form-group">
-                <label htmlFor="last_name">Last Name *</label>
+              <div>
+                <label className="block text-gray-300 mb-2 font-semibold">
+                  Last Name <span className="text-red-500">*</span>
+                </label>
                 <input
                   type="text"
-                  id="last_name"
                   name="last_name"
                   value={formData.last_name}
                   onChange={handleInputChange}
                   required
+                  className="w-full px-4 py-3 bg-[#2e2e2e] border-2 border-[#3d3d3d] rounded-lg text-white focus:border-[#ff6d00] focus:outline-none transition-colors"
                 />
               </div>
             </div>
 
-            <div className="form-row">
-              <div className="form-group">
-                <label htmlFor="relation">Relation *</label>
+            {/* Relation & Primary Row */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-gray-300 mb-2 font-semibold">
+                  Relation <span className="text-red-500">*</span>
+                </label>
                 <select
-                  id="relation"
                   name="relation"
                   value={formData.relation}
                   onChange={handleInputChange}
                   required
+                  className="w-full px-4 py-3 bg-[#2e2e2e] border-2 border-[#3d3d3d] rounded-lg text-white focus:border-[#ff6d00] focus:outline-none transition-colors"
                 >
                   <option value="">Select relation</option>
                   <option value="Parent">Parent</option>
@@ -230,29 +242,32 @@ const MemberContacts = () => {
                   <option value="Other">Other</option>
                 </select>
               </div>
-
-              <div className="form-group checkbox-group">
-                <label>
+              <div className="flex items-center">
+                <label className="flex items-center gap-3 cursor-pointer mt-8">
                   <input
                     type="checkbox"
                     name="is_primary"
                     checked={formData.is_primary}
                     onChange={handleInputChange}
+                    className="w-5 h-5 accent-[#ff6d00] cursor-pointer"
                   />
-                  Primary Contact
+                  <span className="text-gray-300 font-semibold">Primary Contact</span>
                 </label>
               </div>
             </div>
 
-            <div className="form-row">
-              <div className="form-group">
-                <label htmlFor="country_calling_code">Country Code *</label>
+            {/* Phone Row */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-gray-300 mb-2 font-semibold">
+                  Country Code <span className="text-red-500">*</span>
+                </label>
                 <select
-                  id="country_calling_code"
                   name="country_calling_code"
                   value={formData.country_calling_code}
                   onChange={handleInputChange}
                   required
+                  className="w-full px-4 py-3 bg-[#2e2e2e] border-2 border-[#3d3d3d] rounded-lg text-white focus:border-[#ff6d00] focus:outline-none transition-colors"
                 >
                   <option value="+44">+44 (UK)</option>
                   <option value="+1">+1 (US/Canada)</option>
@@ -260,65 +275,81 @@ const MemberContacts = () => {
                   <option value="+61">+61 (Australia)</option>
                 </select>
               </div>
-
-              <div className="form-group">
-                <label htmlFor="primary_phone_number">Primary Phone *</label>
+              <div>
+                <label className="block text-gray-300 mb-2 font-semibold">
+                  Primary Phone <span className="text-red-500">*</span>
+                </label>
                 <input
                   type="tel"
-                  id="primary_phone_number"
                   name="primary_phone_number"
                   value={formData.primary_phone_number}
                   onChange={handleInputChange}
                   placeholder="7123456789"
                   required
+                  className="w-full px-4 py-3 bg-[#2e2e2e] border-2 border-[#3d3d3d] rounded-lg text-white placeholder-gray-500 focus:border-[#ff6d00] focus:outline-none transition-colors"
                 />
               </div>
             </div>
 
-            <div className="form-row">
-              <div className="form-group">
-                <label htmlFor="secondary_phone_number">Secondary Phone</label>
+            {/* Secondary Phone & Email Row */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-gray-300 mb-2 font-semibold">
+                  Secondary Phone
+                </label>
                 <input
                   type="tel"
-                  id="secondary_phone_number"
                   name="secondary_phone_number"
                   value={formData.secondary_phone_number}
                   onChange={handleInputChange}
                   placeholder="7987654321"
+                  className="w-full px-4 py-3 bg-[#2e2e2e] border-2 border-[#3d3d3d] rounded-lg text-white placeholder-gray-500 focus:border-[#ff6d00] focus:outline-none transition-colors"
                 />
               </div>
-
-              <div className="form-group">
-                <label htmlFor="email">Email</label>
+              <div>
+                <label className="block text-gray-300 mb-2 font-semibold">
+                  Email
+                </label>
                 <input
                   type="email"
-                  id="email"
                   name="email"
                   value={formData.email}
                   onChange={handleInputChange}
                   placeholder="contact@example.com"
+                  className="w-full px-4 py-3 bg-[#2e2e2e] border-2 border-[#3d3d3d] rounded-lg text-white placeholder-gray-500 focus:border-[#ff6d00] focus:outline-none transition-colors"
                 />
               </div>
             </div>
 
-            <div className="form-group">
-              <label htmlFor="address_id">Address ID *</label>
+            {/* Address ID */}
+            <div>
+              <label className="block text-gray-300 mb-2 font-semibold">
+                Address ID <span className="text-red-500">*</span>
+              </label>
               <input
                 type="number"
-                id="address_id"
                 name="address_id"
                 value={formData.address_id}
                 onChange={handleInputChange}
                 required
+                className="w-full px-4 py-3 bg-[#2e2e2e] border-2 border-[#3d3d3d] rounded-lg text-white focus:border-[#ff6d00] focus:outline-none transition-colors"
               />
-              <small>Enter the address ID for this contact</small>
+              <p className="text-gray-500 text-sm mt-1">Enter the address ID for this contact</p>
             </div>
 
-            <div className="form-actions">
-              <button type="submit" className="btn-primary">
+            {/* Form Actions */}
+            <div className="flex flex-wrap gap-4 pt-4">
+              <button
+                type="submit"
+                className="px-8 py-3 bg-[#ff6d00] text-white font-bold rounded-lg hover:bg-[#e66200] transition-all duration-300"
+              >
                 {editingContact ? 'Update Contact' : 'Add Contact'}
               </button>
-              <button type="button" className="btn-secondary" onClick={resetForm}>
+              <button
+                type="button"
+                onClick={resetForm}
+                className="px-8 py-3 bg-[#2e2e2e] text-gray-300 font-bold rounded-lg hover:bg-[#3d3d3d] transition-all duration-300"
+              >
                 Cancel
               </button>
             </div>
@@ -326,66 +357,99 @@ const MemberContacts = () => {
         </div>
       )}
 
-      {/* Contacts List */}
-      <div className="contacts-grid">
+      {/* Contacts Grid */}
+      <div className="bg-[#1a1a1a] rounded-2xl shadow-2xl p-8 border-2 border-[#3d3d3d]">
+        <h3 className="text-2xl font-black text-white mb-6">Your Contacts</h3>
+        
         {contacts.length === 0 ? (
-          <div className="no-data">
-            <p>No contacts found. Add your first contact to get started.</p>
-          </div>
+          <p className="text-gray-400 text-center py-8">
+            No contacts found. Add your first contact to get started.
+          </p>
         ) : (
-          contacts.map(contact => (
-            <div key={contact.id} className="contact-card">
-              <div className="contact-header">
-                <h3>{contact.first_name} {contact.last_name}</h3>
-                {contact.is_primary && (
-                  <span className="primary-badge">Primary</span>
-                )}
-              </div>
-              
-              <div className="contact-details">
-                <div className="detail-row">
-                  <span className="detail-label">Relation:</span>
-                  <span>{contact.relation}</span>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {contacts.map(contact => (
+              <div
+                key={contact.id}
+                className="bg-[#2e2e2e] rounded-xl p-6 border-l-4 border-[#ff6d00] hover:bg-[#3d3d3d] transition-all duration-300"
+              >
+                {/* Contact Header */}
+                <div className="flex justify-between items-start mb-4">
+                  <h4 className="text-white font-bold text-lg">
+                    {contact.first_name} {contact.last_name}
+                  </h4>
+                  {contact.is_primary && (
+                    <span className="bg-gradient-to-r from-[#ff6d00] to-[#e66200] text-white px-3 py-1 rounded-lg text-xs font-bold uppercase">
+                      Primary
+                    </span>
+                  )}
                 </div>
-                
-                <div className="detail-row">
-                  <span className="detail-label">Phone:</span>
-                  <span>{contact.country_calling_code} {contact.primary_phone_number}</span>
-                </div>
-                
-                {contact.secondary_phone_number && (
-                  <div className="detail-row">
-                    <span className="detail-label">Secondary:</span>
-                    <span>{contact.country_calling_code} {contact.secondary_phone_number}</span>
-                  </div>
-                )}
-                
-                {contact.email && (
-                  <div className="detail-row">
-                    <span className="detail-label">Email:</span>
-                    <span>{contact.email}</span>
-                  </div>
-                )}
-              </div>
 
-              <div className="contact-actions">
-                <button 
-                  className="btn-edit"
-                  onClick={() => handleEdit(contact)}
-                >
-                  Edit
-                </button>
-                <button 
-                  className="btn-delete"
-                  onClick={() => handleDelete(contact.id)}
-                >
-                  Delete
-                </button>
+                {/* Contact Details */}
+                <div className="space-y-2 mb-4">
+                  <div className="flex gap-2">
+                    <span className="text-[#ff6d00] font-semibold min-w-[80px]">Relation:</span>
+                    <span className="text-gray-300">{contact.relation}</span>
+                  </div>
+                  <div className="flex gap-2">
+                    <span className="text-[#ff6d00] font-semibold min-w-[80px]">Phone:</span>
+                    <span className="text-gray-300">{contact.country_calling_code} {contact.primary_phone_number}</span>
+                  </div>
+                  {contact.secondary_phone_number && (
+                    <div className="flex gap-2">
+                      <span className="text-[#ff6d00] font-semibold min-w-[80px]">Secondary:</span>
+                      <span className="text-gray-300">{contact.country_calling_code} {contact.secondary_phone_number}</span>
+                    </div>
+                  )}
+                  {contact.email && (
+                    <div className="flex gap-2">
+                      <span className="text-[#ff6d00] font-semibold min-w-[80px]">Email:</span>
+                      <span className="text-gray-300 break-all">{contact.email}</span>
+                    </div>
+                  )}
+                </div>
+
+                {/* Action Buttons */}
+                <div className="flex gap-2 pt-4 border-t border-[#3d3d3d]">
+                  <button
+                    onClick={() => handleEdit(contact)}
+                    className="flex-1 px-4 py-2 bg-green-600 text-white font-bold rounded-lg hover:bg-green-700 transition-all duration-300"
+                  >
+                    Edit
+                  </button>
+                  <button
+                    onClick={() => handleDelete(contact.id)}
+                    className="flex-1 px-4 py-2 bg-red-600 text-white font-bold rounded-lg hover:bg-red-700 transition-all duration-300"
+                  >
+                    Delete
+                  </button>
+                </div>
               </div>
-            </div>
-          ))
+            ))}
+          </div>
         )}
       </div>
+
+      {/* Stats Summary */}
+      {contacts.length > 0 && (
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="bg-[#1a1a1a] rounded-xl p-6 border-2 border-[#3d3d3d] text-center">
+            <p className="text-gray-400 mb-2">Total Contacts</p>
+            <p className="text-4xl font-black text-[#ff6d00]">{contacts.length}</p>
+          </div>
+          <div className="bg-[#1a1a1a] rounded-xl p-6 border-2 border-[#3d3d3d] text-center">
+            <p className="text-gray-400 mb-2">Primary Contacts</p>
+            <p className="text-4xl font-black text-green-500">
+              {contacts.filter(c => c.is_primary).length}
+            </p>
+          </div>
+          <div className="bg-[#1a1a1a] rounded-xl p-6 border-2 border-[#3d3d3d] text-center">
+            <p className="text-gray-400 mb-2">With Email</p>
+            <p className="text-4xl font-black text-blue-500">
+              {contacts.filter(c => c.email).length}
+            </p>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
