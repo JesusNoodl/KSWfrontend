@@ -189,17 +189,17 @@ export const getMyPersonsDetails = async () => {
 
 // Get all contacts for the current user
 export const getMyContacts = async () => {
-  return apiCall(`/contacts/`);
+  return apiCall(`/contact/`);
 };
 
 // Get a specific contact by ID
 export const getContact = async (contactId) => {
-  return apiCall(`/contacts/${contactId}`);
+  return apiCall(`/contact/${contactId}`);
 };
 
 // Create a new contact
 export const createContact = async (contactData) => {
-  return apiCall(`/contacts/`, {
+  return apiCall(`/contact/`, {
     method: 'POST',
     body: JSON.stringify(contactData),
   });
@@ -207,7 +207,7 @@ export const createContact = async (contactData) => {
 
 // Update an existing contact
 export const updateContact = async (contactId, contactData) => {
-  return apiCall(`/contacts/${contactId}`, {
+  return apiCall(`/contact/${contactId}`, {
     method: 'PUT',
     body: JSON.stringify(contactData),
   });
@@ -217,7 +217,7 @@ export const updateContact = async (contactId, contactData) => {
 export const deleteContact = async (contactId) => {
   const token = await getAuthToken();
   
-  const response = await fetch(`${API_BASE_URL}/contacts/${contactId}`, {
+  const response = await fetch(`${API_BASE_URL}/contact/${contactId}`, {
     method: 'DELETE',
     headers: {
       'Authorization': `Bearer ${token}`,
@@ -235,5 +235,5 @@ export const deleteContact = async (contactId) => {
 
 // Get contacts for a specific user (admin only)
 export const getContactsForUser = async (userId) => {
-  return apiCall(`/contacts/user/${userId}`);
+  return apiCall(`/contact/user/${userId}`);
 };
