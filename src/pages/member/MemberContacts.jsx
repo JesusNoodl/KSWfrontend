@@ -394,7 +394,7 @@ const MemberContacts = () => {
                     name="postcode"
                     value={formData.postcode}
                     onChange={handleInputChange}
-                    placeholder="e.g. Fakenham"
+                    placeholder="e.g. NR20 1AB"
                     className="w-full px-4 py-3 bg-[#2e2e2e] border-2 border-[#3d3d3d] rounded-lg text-white placeholder-gray-500 focus:border-[#ff6d00] focus:outline-none transition-colors"
                   />
                 </div>
@@ -443,7 +443,7 @@ const MemberContacts = () => {
             No contacts found. Add your first contact to get started.
           </p>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4">
             {contacts.map(contact => (
               <div
                 key={contact.id}
