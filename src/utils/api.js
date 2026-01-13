@@ -278,7 +278,7 @@ export const updateStudent = async (studentId, studentData) => {
 
 // Enrol a new student
 export const enrolStudent = async (studentData) => {
-  return apiCall('/students/enrol/', {
+  return apiCall('/person/enroll/', {
     method: 'POST',
     body: JSON.stringify(studentData)
   });
