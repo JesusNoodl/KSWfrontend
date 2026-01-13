@@ -158,7 +158,7 @@ export default function EnrolStudent() {
               value={formData.age_category_id}
               onChange={handleChange}
               required
-              className="w-full px-4 py-2 bg-[#2e2e2e] text-white rounded-lg border border-gray-600 focus:border-[#ff6d00] focus:outline-none"
+              className="w-full px-4 py-2 bg-[#2e2e2e] text-white rounded-lg border border-gray-600 focus:border-[#ff6d00] focus:outline-none [&>option]:bg-[#2e2e2e] [&>option]:text-white"
             >
               <option value="">Select age category</option>
               {ageCategories.map(category => (
