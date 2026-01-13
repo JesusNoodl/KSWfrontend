@@ -1,6 +1,6 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { enrolStudent, getAgeCategories } from '../../utils/api';
+import { enrolStudent, getAgeCategories } from '../../api/api';
 
 export default function EnrolStudent() {
   const navigate = useNavigate();
@@ -8,8 +8,6 @@ export default function EnrolStudent() {
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(false);
   const [ageCategories, setAgeCategories] = useState([]);
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const dropdownRef = useRef(null);
   
   const [formData, setFormData] = useState({
     first_name: '',
@@ -34,41 +32,15 @@ export default function EnrolStudent() {
     fetchAgeCategories();
   }, []);
 
-  // Close dropdown when clicking outside
-  useEffect(() => {
-    function handleClickOutside(event) {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-        setIsDropdownOpen(false);
-      }
-    }
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
-
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
       [name]: value
     }));
+    // Clear error when user starts typing
     if (error) setError(null);
     if (success) setSuccess(false);
-  };
-
-  const handleCategorySelect = (categoryId, categoryName) => {
-    setFormData(prev => ({
-      ...prev,
-      age_category_id: categoryId
-    }));
-    setIsDropdownOpen(false);
-    if (error) setError(null);
-    if (success) setSuccess(false);
-  };
-
-  const getSelectedCategoryName = () => {
-    const selected = ageCategories.find(cat => cat.id === formData.age_category_id);
-    return selected ? selected.name : 'Select age category';
   };
 
   const handleSubmit = async (e) => {
@@ -77,14 +49,8 @@ export default function EnrolStudent() {
     setError(null);
     setSuccess(false);
 
-    // Validate that an age category is selected
-    if (!formData.age_category_id) {
-      setError('Please select an age category');
-      setLoading(false);
-      return;
-    }
-
     try {
+      // Convert age_category_id to integer
       const submissionData = {
         ...formData,
         dob: new Date(formData.dob).toISOString(),
@@ -101,6 +67,9 @@ export default function EnrolStudent() {
         dob: '',
         age_category_id: ''
       });
+
+      // Optional: redirect after a delay
+      // setTimeout(() => navigate('/admin/students'), 2000);
       
     } catch (err) {
       setError(err.message);
@@ -180,45 +149,26 @@ export default function EnrolStudent() {
             />
           </div>
 
-          {/* Age Category - Custom Dropdown */}
-          <div className="mb-6" ref={dropdownRef}>
-            <label className="block text-white mb-2 font-medium">
+          {/* Age Category */}
+          <div className="mb-6">
+            <label htmlFor="age_category_id" className="block text-white mb-2 font-medium">
               Age Category <span className="text-[#ff6d00]">*</span>
             </label>
-            <div className="relative">
-              <button
-                type="button"
-                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                className="w-full px-4 py-2 bg-[#2e2e2e] text-white rounded-lg border border-gray-600 focus:border-[#ff6d00] focus:outline-none text-left flex justify-between items-center"
-              >
-                <span className={formData.age_category_id ? 'text-white' : 'text-gray-400'}>
-                  {getSelectedCategoryName()}
-                </span>
-                <svg 
-                  className={`w-5 h-5 transition-transform ${isDropdownOpen ? 'rotate-180' : ''}`}
-                  fill="none" 
-                  stroke="currentColor" 
-                  viewBox="0 0 24 24"
-                >
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                </svg>
-              </button>
-
-              {isDropdownOpen && (
-                <div className="absolute z-10 w-full mt-1 bg-[#2e2e2e] border border-gray-600 rounded-lg shadow-lg max-h-60 overflow-auto">
-                  {ageCategories.map(category => (
-                    <button
-                      key={category.id}
-                      type="button"
-                      onClick={() => handleCategorySelect(category.id, category.name)}
-                      className="w-full px-4 py-2 text-left text-white hover:bg-[#ff6d00] transition-colors"
-                    >
-                      {category.name}
-                    </button>
-                  ))}
-                </div>
-              )}
-            </div>
+            <select
+              id="age_category_id"
+              name="age_category_id"
+              value={formData.age_category_id}
+              onChange={handleChange}
+              required
+              className="w-full px-4 py-2 bg-[#2e2e2e] text-white rounded-lg border border-gray-600 focus:border-[#ff6d00] focus:outline-none"
+            >
+              <option value="">Select age category</option>
+              {ageCategories.map(category => (
+                <option key={category.id} value={category.id}>
+                  {category.name}
+                </option>
+              ))}
+            </select>
           </div>
 
           {/* Submit Button */}
