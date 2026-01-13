@@ -33,10 +33,10 @@ export default function EnrolStudent() {
   }, []);
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
+    const { cat_name, value } = e.target;
     setFormData(prev => ({
       ...prev,
-      [name]: value
+      [cat_name]: value
     }));
     // Clear error when user starts typing
     if (error) setError(null);
@@ -165,7 +165,7 @@ export default function EnrolStudent() {
               <option value="">Select age category</option>
               {ageCategories.map(category => (
                 <option key={category.id} value={category.id}>
-                  {category.name}
+                  {category.cat_name}
                 </option>
               ))}
             </select>
