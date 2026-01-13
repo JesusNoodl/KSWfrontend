@@ -252,3 +252,26 @@ export const getUserRole = async () => {
 export const getAllStudents = async () => {
   return apiCall(`/person/`);
 };
+
+// Get a specific student by ID
+export const getStudent = async (studentId) => {
+  return apiCall(`/person/${studentId}`);
+};
+
+// Get student's promotion history
+export const getStudentPromotions = async (studentId) => {
+  return apiCall(`/promotions/student/${studentId}`);
+};
+
+// Get student's awards
+export const getStudentAwards = async (studentId) => {
+  return apiCall(`/awards/student/${studentId}`);
+};
+
+// Update a student's information
+export const updateStudent = async (studentId, studentData) => {
+  return apiCall(`/person/${studentId}`, {
+    method: 'PUT',
+    body: JSON.stringify(studentData),
+  });
+};
