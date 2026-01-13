@@ -245,7 +245,7 @@ export const getContactsForUser = async (userId) => {
  * @returns {Promise<{email: string, role: string}>} User's email and role
  */
 export const getUserRole = async () => {
-  return apiCall('/user/me/role');
+  return apiCall('/user/me/role/');
 };
 
 // Get all students (admin only)
@@ -278,7 +278,7 @@ export const updateStudent = async (studentId, studentData) => {
 
 // Enrol a new student
 export const enrolStudent = async (studentData) => {
-  return apiCall('/students/enrol', {
+  return apiCall('/students/enrol/', {
     method: 'POST',
     body: JSON.stringify(studentData)
   });
@@ -286,5 +286,5 @@ export const enrolStudent = async (studentData) => {
 
 // Get age categories
 export const getAgeCategories = async () => {
-  return apiCall('/age_categories');
+  return apiCall('/age_category/');
 };
