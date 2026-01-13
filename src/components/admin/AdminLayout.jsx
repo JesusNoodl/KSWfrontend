@@ -32,7 +32,7 @@ function AdminLayout() {
   // Admin navigation items - organised by category
   const navItems = [
     { path: '/admin', label: 'Dashboard', icon: '📊', exact: true },
-    { path: '/admin/people', label: 'People', icon: '👥' },
+    { path: '/admin/students', label: 'Students', icon: '👥' },
     { path: '/admin/enrol', label: 'Enrol New Student', icon: '➕' },
     { path: '/admin/users', label: 'User Accounts', icon: '🔐' },
     { path: '/admin/classes', label: 'Classes', icon: '📅' },

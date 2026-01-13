@@ -20,6 +20,7 @@ import MemberContacts from './pages/member/MemberContacts';
 import AdminLayout from './components/admin/AdminLayout';
 import AdminDashboard from './pages/admin/AdminDashboard';
 import { SpeedInsights } from '@vercel/speed-insights/react';
+import AdminStudentsList from './pages/admin/AdminStudentList';
 
 function App() {
   return (
@@ -81,8 +82,9 @@ function App() {
               {/* Dashboard - shows when path is exactly /admin */}
               <Route index element={<AdminDashboard />} />
               
-              {/* Placeholder routes - create these pages as you build them */}
               {/* <Route path="people" element={<AdminPeoplePage />} /> */}
+              <Route path="students" element={<AdminStudentsList />} />
+
               {/* <Route path="people/:id" element={<AdminPersonDetailPage />} /> */}
               {/* <Route path="enrol" element={<AdminEnrolPage />} /> */}
               {/* <Route path="users" element={<AdminUsersPage />} /> */}
