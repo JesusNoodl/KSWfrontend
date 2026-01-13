@@ -247,3 +247,8 @@ export const getContactsForUser = async (userId) => {
 export const getUserRole = async () => {
   return apiCall('/user/me/role');
 };
+
+// Get all students (admin only)
+export const getAllStudents = async () => {
+  return apiCall(`/person/`);
+};
