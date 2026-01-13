@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { enrolStudent, getAgeCategories } from '../../api/api';
+import { enrolStudent, getAgeCategories } from '../../utils/api';
 
 export default function EnrolStudent() {
   const navigate = useNavigate();
