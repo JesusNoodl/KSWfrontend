@@ -163,7 +163,7 @@ function StudentDetail() {
         </div>
         <p className="text-gray-400">{error || 'Student not found'}</p>
         <button
-          onClick={() => navigate('/member/students')}
+          onClick={() => navigate('/admin/students')}
           className="mt-4 px-6 py-2 bg-[#ff6d00] text-white rounded-lg hover:bg-[#e66200] transition"
         >
           Back to Students List
@@ -178,7 +178,7 @@ function StudentDetail() {
     <div className="space-y-6">
       {/* Back Button */}
       <button
-        onClick={() => navigate('/member/students')}
+        onClick={() => navigate('/admin/students')}
         className="flex items-center gap-2 text-gray-400 hover:text-[#ff6d00] transition"
       >
         <ArrowLeft size={20} />

@@ -398,7 +398,7 @@ function AdminStudentsList() {
                       <td className="px-6 py-4 whitespace-nowrap">
                         <button
                           className="text-[#ff6d00] hover:text-[#e66200] font-semibold text-sm"
-                          onClick={() => navigate(`/member/students/${student.id}`)}
+                          onClick={() => navigate(`/admin/students/${student.id}`)}
                         >
                           View Details
                         </button>
