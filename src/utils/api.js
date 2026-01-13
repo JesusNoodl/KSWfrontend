@@ -275,3 +275,16 @@ export const updateStudent = async (studentId, studentData) => {
     body: JSON.stringify(studentData),
   });
 };
+
+// Enrol a new student
+export const enrolStudent = async (studentData) => {
+  return apiCall('/students/enrol', {
+    method: 'POST',
+    body: JSON.stringify(studentData)
+  });
+};
+
+// Get age categories
+export const getAgeCategories = async () => {
+  return apiCall('/age-categories');
+};

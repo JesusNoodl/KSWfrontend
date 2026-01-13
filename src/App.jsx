@@ -21,6 +21,7 @@ import AdminLayout from './components/admin/AdminLayout';
 import AdminDashboard from './pages/admin/AdminDashboard';
 import { SpeedInsights } from '@vercel/speed-insights/react';
 import AdminStudentsList from './pages/admin/AdminStudentList';
+import AdminEnroll from './pages/admin/AdminEnroll';
 
 function App() {
   return (
@@ -87,6 +88,8 @@ function App() {
 
               {/* <Route path="people/:id" element={<AdminPersonDetailPage />} /> */}
               {/* <Route path="enrol" element={<AdminEnrolPage />} /> */}
+              <Route path="enrol" element={<AdminEnroll />} />
+
               {/* <Route path="users" element={<AdminUsersPage />} /> */}
               {/* <Route path="classes" element={<AdminClassesPage />} /> */}
               {/* <Route path="promotions" element={<AdminPromotionsPage />} /> */}
