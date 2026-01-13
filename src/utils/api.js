@@ -286,5 +286,5 @@ export const enrolStudent = async (studentData) => {
 
 // Get age categories
 export const getAgeCategories = async () => {
-  return apiCall('/age-categories');
+  return apiCall('/age_categories');
 };
