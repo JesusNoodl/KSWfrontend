@@ -24,10 +24,10 @@ function AdminDashboard() {
       colour: 'bg-green-600',
     },
     {
-      title: 'Manage People',
+      title: 'Manage Students',
       description: 'View and edit student records',
       icon: '👥',
-      link: '/admin/people',
+      link: '/admin/students',
       colour: 'bg-blue-600',
     },
     {
